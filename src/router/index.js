@@ -8,7 +8,6 @@ import Equipment from '@/components/views/Quality/Equipment/equipment'
 import Inspection from '@/components/views/Quality/Inspection/inspection'
 import Center from '@/components/views/Quality/Center/center'
 
-
 import People from '@/components/views/Cost/People/people'
 import Verify from '@/components/views/Cost/Verify/verify'
 import Materiel from '@/components/views/Cost/Materiel/materiel'
@@ -32,14 +31,14 @@ export default new Router({
       component: Login
     },
     {
-      path:'/index',
-      redirect:'customer'
+      path: '/index',
+      redirect: 'customer'
     },
     {
       path: '/index',
       name: 'index',
       component: index,
-      rediect:'/customer',
+      rediect: '/customer',
       children: [{
         path: '/customer',
         name: 'Customer',
