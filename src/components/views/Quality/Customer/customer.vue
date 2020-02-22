@@ -339,7 +339,7 @@ export default {
           this.$http.post('user/addOrUpdateUser', array, res => {
             if (res.code === 1000) {
               if (this.flag === 1) {
-                this.$Message.success('新增用户成功')
+                this.$Message.success('新增成功')
               } else {
                 this.$Message.success('修改成功')
               }
