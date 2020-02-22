@@ -30,6 +30,7 @@
         <Button type="primary" @click="handleListApproveHistory">查询</Button>
         <Button type="primary" @click="resetSearch">重置</Button>
       </Form>
+
       <div>
         <Button class="findTab" type="info" @click="addData">增加</Button>
         <Button class="findTab" type="error" @click="handleSelectAll">删除</Button>
@@ -326,7 +327,6 @@ export default {
     },
     modalAdd () {
       if (this.falg === 1 || this.falg === 2) {
-        console.log(this.formItem)
         let array = {}
         array.name = this.formItem.name
         array.sex = this.formItem.sex

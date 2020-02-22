@@ -73,6 +73,7 @@
            position="relative"
            @on-ok="modalAdd" @on-cancel="modalExit"
            margin-top="5px" :title="modalTtile"
+           @on-visible-change="modalChange"
            :footer-hide="this.falg ===3">
       <Form :model="formItem" :label-width="80">
         <FormItem label="节点地址" class="titillate">
@@ -193,6 +194,13 @@ export default {
     }
   },
   methods: {
+    modalChange (flag) {
+      if (!flag) {
+        for (let i in this.formItem) {
+          this.formItem[i] = ''
+        }
+      }
+    },
     pageChange (page) {
       this.page = page
       this.handleListApproveHistory()
