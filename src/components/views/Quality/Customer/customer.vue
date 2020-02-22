@@ -43,7 +43,9 @@
         </template>
 
         <template slot-scope="{ row, index }" slot="sex">
-          <Input type="text" v-model="editSex" v-if="editIndex === index" />
+          <Select v-model="editSex" v-if="editIndex === index" transfer>
+            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
           <span v-else>{{ row.sex }}</span>
         </template>
 
@@ -230,7 +232,7 @@ export default {
       let array = []
       array.name = this.select.name
       array.sex = this.select.sex
-      array.age = this.select.age
+      array.age = Number(this.select.age)
       array.address = this.select.address
       array.phone = this.select.phone
       this.historyData = this.historyData.filter(function (item) {
@@ -270,10 +272,10 @@ export default {
         pageSize: this.pageSize,
         roleId: 'b30ae35f8de64cb59125dc9e714f3779',
         name: this.select.name,
-        sex: this.formItem.sex,
-        age: this.formItem.age === '' ? null : this.formItem.age,
-        phone: this.formItem.phone,
-        address: this.formItem.address
+        sex: this.select.sex,
+        age: this.select.age === '' ? null : Number(this.select.age),
+        phone: this.select.phone,
+        address: this.select.address
       }, res => {
         this.historyData = res.data.userList
         this.dataCount = res.data.count
