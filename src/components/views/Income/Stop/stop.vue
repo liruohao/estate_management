@@ -35,11 +35,10 @@
               <Input v-model="select.parkinPermit  " style="width: 72%" />
             </td>
             <td class="tabbut">
-              <Button type="primary" style="width: 80%" @click="selectData">查询</Button>
+              <Button type="primary" style="width: 80%" @click="handleListApproveHistory">查询</Button>
             </td>
           </tr>
         </table>
-
 
       </div>
       <div>
@@ -109,7 +108,22 @@
           </div>
         </template>
       </Table>
-      <Page  :total="dataCount" :pclassification-size="pclassificationSize" show-sizer class="paging" @on-change="changepclassification" @on-pclassification-size-change="pclassificationsize"></Page>
+      <Page :total="dataCount"
+            style="margin-top: 10px;  width: 100%;
+      height: 56px;
+      line-height: 56px;
+      padding: 0 15px;
+      color: black;
+      box-sizing: border-box;"
+            show-elevator
+            show-sizer
+            show-total
+            :current="page"
+            :page-size-opts="[10, 20, 30, 50]"
+            :page-size="pageSize"
+            @on-change="pageChange"
+            @on-page-size-change="pageSizeChange"/>
+<!--      <Page  :total="dataCount" :pclassification-size="pclassificationSize" show-sizer class="paging" @on-change="changepclassification" @on-pclassification-size-change="pclassificationsize"></Page>-->
     </div>
     <Modal v-model="editorshow"  width="60%"
            position="relative"
@@ -155,288 +169,322 @@
 </template>
 
 <script>
-  import moment from 'moment'
-  import tooLbar from './../../toolbar/toolbar.vue'
+import moment from 'moment'
+import tooLbar from './../../toolbar/toolbar.vue'
 
-  export default {
-    carPark: 'customer',
-    data () {
-      return {
-        columns4: [
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center',
-            fixed:'left'
-          },
-          {
-            title: '停车场',
-            slot: 'carPark',
-            align:'center',
-            width: 150,
-            fixed:'left'
-          },
-          {
-            title: '车位编号',
-            slot: 'carNum',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '位置',
-            slot: 'position',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '承租人',
-            slot: 'Lessee',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '车牌号',
-            slot: 'licensePlate',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '停车证号',
-            slot: 'parkinPermit',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '电话',
-            slot: 'telephone',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '开始日期',
-            slot: 'startTime',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '结束日期',
-            slot: 'endTime',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '缴费',
-            slot: 'pay',
-            align:'center',
-            width: 150,
-          },
-          {
-            title: '操作',
-            slot: 'action',
-            align:'center',
-            width: 200,
-            fixed:'right',
-          }
-        ],
-        //分页传参条数
-        ajaxHistoryData:[],
-        // 初始化信息总条数
-        dataCount:0,
-        // 每页显示多少条
-        pclassificationSize:10,
-        // 当前页码
-        pclassification:1,
-        historyData: [],
-        modalTtile:'',
-        falg: '',
-        editorshow: false,
-        // 模态框数据
-        formItem: {
-          carPark: '',
-          carNum:'',
-          position: '',
-          Lessee:'',
-          licensePlate:'',
-          parkinPermit:'',
-          telephone:'',
-          startTime:'',
-          endTime:'',
-          pay:''
+export default {
+  carPark: 'customer',
+  data () {
+    return {
+      columns4: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center',
+          fixed: 'left'
         },
-        model1: '',
-        carParkList: [],
-        select: {
-          carPark: '',
-          carNum:'',
-          position: '',
-          Lessee:'',
-          licensePlate:'',
-          parkinPermit:'',
-          telephone:'',
-          startTime:'',
-          endTime:'',
-          pay:''
+        {
+          title: '停车场',
+          slot: 'carPark',
+          align: 'center',
+          width: 150,
+          fixed: 'left'
         },
+        {
+          title: '车位编号',
+          slot: 'carNum',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '位置',
+          slot: 'position',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '承租人',
+          slot: 'Lessee',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '车牌号',
+          slot: 'licensePlate',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '停车证号',
+          slot: 'parkinPermit',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '电话',
+          slot: 'telephone',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '开始日期',
+          slot: 'startTime',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '结束日期',
+          slot: 'endTime',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '缴费',
+          slot: 'pay',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          align: 'center',
+          width: 200,
+          fixed: 'right'
+        }
+      ],
+      dataCount: 0,
+      // 每页显示多少条
+      pageSize: 10,
+      // 当前页码
+      page: 1,
+      // 分页传参条数
+      ajaxHistoryData: [],
+      historyData: [],
+      modalTtile: '',
+      falg: '',
+      editorshow: false,
+      // 模态框数据
+      formItem: {
+        carPark: '',
+        carNum: '',
+        position: '',
+        Lessee: '',
+        licensePlate: '',
+        parkinPermit: '',
+        telephone: '',
+        startTime: '',
+        endTime: '',
+        pay: ''
+      },
+      model1: '',
+      carParkList: [],
+      select: {
+        carPark: '',
+        carNum: '',
+        position: '',
+        Lessee: '',
+        licensePlate: '',
+        parkinPermit: '',
+        telephone: '',
+        startTime: '',
+        endTime: '',
+        pay: ''
+      },
 
-        //修改传参
-        editIndex: -1,
-        editcarPark: '',
-        editcarNum: '',
-        editposition: '',
-        editLessee: '',
-        editlicensePlate: '',
-        editparkinPermit: '',
-        edittelephone: '',
-        editstartTime: '',
-        editendTime: '',
-        editpay: ''
+      // 修改传参
+      editIndex: -1,
+      editcarPark: '',
+      editcarNum: '',
+      editposition: '',
+      editLessee: '',
+      editlicensePlate: '',
+      editparkinPermit: '',
+      edittelephone: '',
+      editstartTime: '',
+      editendTime: '',
+      editpay: '',
+      id: ''
+    }
+  },
+  components: {tooLbar},
+  methods: {
+    // 查询
+    selectData () {
+      let array = []
+      array.carPark = this.select.carPark
+      array.carNum = this.select.carNum
+      array.position = this.select.position
+      array.Lessee = this.select.Lessee
+      array.licensePlate = this.select.licensePlate
+      array.parkinPermit = this.select.parkinPermit
+      array.telephone = this.select.telephone
+      array.startTime = this.select.startTime
+      array.endTime = this.select.endTime
+      array.pay = this.select.pay
+
+      this.historyData = this.historyData.filter(function (item) {
+        return ((item.carPark == array.carPark && item.carNum == array.carNum && item.position == array.position && item.Lessee == array.Lessee && item.licensePlate == array.licensePlate && item.parkinPermit == array.parkinPermit && item.telephone == array.telephone && item.startTime == array.startTime && item.endTime == array.endTime && item.pay == array.pay) || (item.carPark == array.carPark || item.carNum == array.carNum || item.position == array.position || item.Lessee == array.Lessee || item.licensePlate == array.licensePlate || item.parkinPermit == array.parkinPermit || item.telephone == array.telephone || item.startTime == array.startTime || item.endTime == array.endTime || item.pay == array.pay))
+      })
+    },
+
+    // 修改信息
+    handleEdit (row, index) {
+      this.editcarPark = row.carPark
+      this.editcarNum = row.carNum
+      this.editposition = row.position
+      this.editLessee = row.Lessee
+      this.editlicensePlate = row.licensePlate
+      this.editparkinPermit = row.parkinPermit
+      this.edittelephone = row.telephone
+      this.editstartTime = row.startTime
+      this.editendTime = row.endTime
+      this.editpay = row.pay
+      this.id = row.id
+      this.editIndex = index
+    },
+    handleSave (index) {
+      this.historyData[index].carPark = this.editcarPark
+      this.historyData[index].carNum = this.editcarNum
+      this.historyData[index].position = this.editposition
+      this.historyData[index].Lessee = this.editLessee
+      this.historyData[index].licensePlate = this.editlicensePlate
+      this.historyData[index].parkinPermit = this.editparkinPermit
+      this.historyData[index].telephone = this.edittelephone
+      this.historyData[index].startTime = this.editstartTime
+      this.historyData[index].endTime = this.editendTime
+      this.historyData[index].pay = this.editpay
+      this.editIndex = -1
+      this.$Messclassification.info('修改成功')
+    },
+    cancel () {
+      this.editIndex = -1,
+      this.$Messclassification.error('取消修改')
+    },
+    // 分页管理, 获取历史记录信息
+    handleListApproveHistory () {
+      this.$http.post('parking/getParking', {
+        pageNum: this.page,
+        pageSize: this.pageSize
+        // carPark: this.select.carPark,
+        // carNum: this.select.carNum,
+        // position: this.select.position,
+        // Lessee: this.select.Lessee,
+        // licensePlate: this.select.licensePlate,
+        // parkinPermit: this.select.parkinPermit,
+        // telephone: this.select.telephone,
+        // startTime: this.select.startTime,
+        // endTime: this.select.endTime,
+        // pay: this.select.pay
+      }, res => {
+        this.historyData = res.data.userList
+        this.dataCount = res.data.count
+      })
+    },
+    pageChange (page) {
+      this.page = page
+      this.handleListApproveHistory()
+    },
+    pageSizeChange (pageSize) {
+      this.pageSize = pageSize
+      this.handleListApproveHistory()
+    },
+    // 当前页码
+    changepclassification (index) {
+      this.pclassification = index
+      let _start = (index - 1) * this.pclassificationSize
+      let _end = index * this.pclassificationSize
+      this.historyData = this.ajaxHistoryData.slice(_start, _end)
+    },
+    // 返回切换后的每页条数
+    pclassificationsize (index) {
+      let _start = (this.pclassification - 1) * index
+      let _end = this.pclassification * index
+      this.historyData = this.ajaxHistoryData.slice(_start, _end)
+      // 当前展示条数
+      this.pclassificationSize = index
+      console.log(this.historyData)
+    },
+
+    // 删除操作
+    handleSelectAll (status) {
+      if (this.showdata.length > 0) {
+        let userIds = []
+        for (let i = 0; i < this.showdata.length; i++) {
+          let userId = this.showdata[i].id
+          userIds.push(userId)
+        }
+        let userIdsStr = userIds.join(',')
+        this.$Modal.confirm({
+          title: '请选择',
+          content: '确定删除这些数据?',
+          onOk: () => {
+            this.$http.get('parking/deleteParking', {
+              id: userIdsStr
+            }, res => {
+              this.handleListApproveHistory()
+              this.$Message.success('删除成功')
+            })
+          }})
+      } else {
+        this.$Message.error('请选择一条数据进行删除')
       }
     },
-    components:{tooLbar},
-    methods:{
-      // 查询
-      selectData () {
-        let array=[];
-        array.carPark=this.select.carPark;
-        array.carNum=this.select.carNum;
-        array.position=this.select.position;
-        array.Lessee=this.select.Lessee;
-        array.licensePlate=this.select.licensePlate;
-        array.parkinPermit=this.select.parkinPermit;
-        array.telephone=this.select.telephone;
-        array.startTime=this.select.startTime;
-        array.endTime=this.select.endTime;
-        array.pay=this.select.pay;
-
-        this.historyData=this.historyData.filter(function (item){
-          return ((item.carPark==array.carPark&&item.carNum==array.carNum&&item.position==array.position&&item.Lessee==array.Lessee&&item.licensePlate==array.licensePlate&&item.parkinPermit==array.parkinPermit&&item.telephone==array.telephone&&item.startTime==array.startTime&&item.endTime==array.endTime&&item.pay==array.pay)||(item.carPark==array.carPark||item.carNum==array.carNum||item.position==array.position||item.Lessee==array.Lessee||item.licensePlate==array.licensePlate||item.parkinPermit==array.parkinPermit||item.telephone==array.telephone||item.startTime==array.startTime||item.endTime==array.endTime||item.pay==array.pay))
-        })
-      },
-
-      //修改信息
-      handleEdit (row, index) {
-        this.editcarPark = row.carPark;
-        this.editcarNum = row.carNum;
-        this.editposition = row.position;
-        this.editLessee = row.Lessee;
-        this.editlicensePlate = row.licensePlate;
-        this.editparkinPermit = row.parkinPermit;
-        this.edittelephone = row.telephone;
-        this.editstartTime = row.startTime;
-        this.editendTime = row.endTime;
-        this.editpay = row.pay;
-        this.editIndex = index;
-      },
-      handleSave (index) {
-        this.historyData[index].carPark = this.editcarPark;
-        this.historyData[index].carNum = this.editcarNum;
-        this.historyData[index].position = this.editposition;
-        this.historyData[index].Lessee = this.editLessee;
-        this.historyData[index].licensePlate = this.editlicensePlate;
-        this.historyData[index].parkinPermit = this.editparkinPermit;
-        this.historyData[index].telephone = this.edittelephone;
-        this.historyData[index].startTime = this.editstartTime;
-        this.historyData[index].endTime = this.editendTime;
-        this.historyData[index].pay = this.editpay;
-        this.editIndex = -1;
-        this.$Messclassification.info('修改成功');
-      },
-      cancel(){
-        this.editIndex = -1,
-          this.$Messclassification.error('取消修改');
-      },
-      //分页管理, 获取历史记录信息
-      handleListApproveHistory(){
-        //通过JSON引入数据
-        this.$http.get('/api/stopCar').then((response)=>{
-          response=response.body;
-          // // 保存取到的所有数据
-          this.ajaxHistoryData = response.data;
-          this.dataCount = response.data.length;
-          // 初始化显示，小于每页显示条数，全显，大于每页显示条数，取前每页条数显示
-          if(response.data.length < this.pclassificationSize){
-            this.historyData = this.ajaxHistoryData;
-          }else{
-            this.historyData = this.ajaxHistoryData.slice(0,this.pclassificationSize);
-          }
-        });
-
-      },
-      // 当前页码
-      changepclassification(index){
-        this.pclassification = index;
-        let _start = ( index - 1 ) * this.pclassificationSize;
-        let _end = index * this.pclassificationSize;
-        this.historyData = this.ajaxHistoryData.slice(_start,_end);
-      },
-      //返回切换后的每页条数
-      pclassificationsize(index){
-        let _start = ( this.pclassification - 1 )   * index;
-        let _end =  this.pclassification   * index;
-        this.historyData = this.ajaxHistoryData.slice(_start,_end);
-        // 当前展示条数
-        this.pclassificationSize = index;
-        console.log(this.historyData)
-      },
-
-      //删除操作
-      handleSelectAll (status) {
-        for (let i = 0; i < this.historyData.length; i++) {
-          for (let j = 0; j < this.showdata.length; j++) {
-            if (this.historyData[i].id === this.showdata[j].id) {
-              this.historyData.splice(i, 1)
-            }
-          }
-        }
-      },
-      // 复选框选择的数据
-      dataChange (data) {
-        this.showdata = data
-      },
-      // 新增
-      addData () {
-        this.modalTtile = '新增'
-        this.falg = 1
-        this.editorshow = true
-      },
-      modalAdd () {
-        if(this.falg===1){
-          let array = {};
-          array.carPark = this.formItem.carPark;
-          array.carNum = this.formItem.carNum;
-          array.position = this.formItem.position;
-          array.Lessee = this.formItem.Lessee;
-          array.licensePlate = this.formItem.licensePlate;
-          array.parkinPermit = this.formItem.parkinPermit;
-          array.telephone = this.formItem.telephone;
-          array.startTime = this.formItem.startTime;
-          array.endTime = this.formItem.endTime;
-          array.pay = this.formItem.pay;
-
-          if((array.carPark.length!==0)&(array.carNum.length!==0)&(array.position.length!==0)&(array.Lessee.length!==0)&(array.licensePlate.length!==0)&(array.parkinPermit.length!==0)&(array.telephone.length!==0)&(array.startTime.length!==0)&(array.endTime.length!==0)&(array.pay.length!==0)){
-            this.historyData.push(array);
-            this.$Message.info('新增成功');
-          }else {
-            alert('请补全以上信息')
-          }
-        }
-      },
-      modalExit(){
-        this.$Messclassification.error('已取消操作');
-      },
-      // ,
-      // getname (name) {
-      //   const date = new Date(parseInt(name));
-      //   const year = date.getFullYear();
-      //   const month = date.getMonth() + 1;
-      //   const day = date.getDate();
-      //   return `${year}-${month}-${day}`;
-      // }
+    // 复选框选择的数据
+    dataChange (data) {
+      this.showdata = data
     },
-    mounted(){
-      this.handleListApproveHistory();
+    // 新增
+    addData () {
+      this.modalTtile = '新增'
+      this.falg = 1
+      this.editorshow = true
+    },
+    modalAdd () {
+      let array = {}
+      array.carPark = this.formItem.carPark
+      array.carNum = this.formItem.carNum
+      array.position = this.formItem.position
+      array.Lessee = this.formItem.Lessee
+      array.licensePlate = this.formItem.licensePlate
+      array.parkinPermit = this.formItem.parkinPermit
+      array.telephone = this.formItem.telephone
+      array.startTime = this.formItem.startTime
+      array.endTime = this.formItem.endTime
+      array.pay = this.formItem.pay
+
+      if ((array.carPark.length !== 0) & (array.carNum.length !== 0) & (array.position.length !== 0) & (array.Lessee.length !== 0) & (array.licensePlate.length !== 0) & (array.parkinPermit.length !== 0) & (array.telephone.length !== 0) & (array.startTime.length !== 0) & (array.endTime.length !== 0) & (array.pay.length !== 0)) {
+        this.$http.post('parking/addOrUpdateParking', array, res => {
+          if (res.code === 1000) {
+            if (this.flag === 1) {
+              this.$Message.success('新增成功')
+            } else {
+              this.$Message.success('修改成功')
+            }
+            this.handleListApproveHistory()
+          } else {
+            this.$Message.warning('请补全以上信息')
+          }
+        })
+      } else {
+        alert('请补全以上信息')
+      }
+    },
+    modalExit () {
+      this.$Messclassification.error('已取消操作')
     }
+    // ,
+    // getname (name) {
+    //   const date = new Date(parseInt(name));
+    //   const year = date.getFullYear();
+    //   const month = date.getMonth() + 1;
+    //   const day = date.getDate();
+    //   return `${year}-${month}-${day}`;
+    // }
+  },
+  mounted () {
+    this.handleListApproveHistory()
   }
+}
 </script>
 
 <style scoped>
