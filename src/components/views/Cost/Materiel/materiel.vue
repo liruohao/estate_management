@@ -117,6 +117,7 @@
     <Modal
       v-model="modalAdd"
       title="新增"
+      @on-visible-change="modalChange"
       @on-ok="addCancel">
       <Form ref="addData"  :model="addData"  label-position="right" :label-width="120">
         <Row>
@@ -384,6 +385,13 @@ export default {
   },
   components: {tooLbar},
   methods: {
+    modalChange (flag) {
+      if (!flag) {
+        for (let i in this.addData) {
+          this.addData[i] = ''
+        }
+      }
+    },
     dataChange (data) {
       this.showdata = data
     },

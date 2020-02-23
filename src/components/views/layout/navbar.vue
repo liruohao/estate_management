@@ -20,7 +20,7 @@
             <MenuItem name="2-1" to="/people">人力资源管理</MenuItem>
             <MenuItem name="2-2" to="/verify">物料管理</MenuItem>
             <MenuItem name="2-3" to="/materiel">能耗管理</MenuItem>
-            <MenuItem name="2-4" to="/subcontract">分包管理</MenuItem>
+            <!--<MenuItem name="2-4" to="/subcontract">分包管理</MenuItem>-->
           </Submenu>
           <Submenu name="3">
             <template slot="title">
@@ -28,7 +28,7 @@
             </template>
             <MenuItem name="3-1" to="/charge">收费管理</MenuItem>
             <MenuItem name="3-2" to="/stop">停车管理</MenuItem>
-            <MenuItem name="3-3" to="/lease">租赁管理</MenuItem>
+            <!--<MenuItem name="3-3" to="/lease">租赁管理</MenuItem>-->
             <MenuItem name="3-4" to="/contract">合同管理</MenuItem>
           </Submenu>
           <Submenu name="4">

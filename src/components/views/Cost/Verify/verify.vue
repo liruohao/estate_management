@@ -414,6 +414,7 @@ export default {
         pageSize: this.pclassificationSize,
         code: this.select.code,
         category: this.select.category,
+        name : this.select.name,
         classification: this.select.classification,
         specifications: this.select.specifications
       }, res => {

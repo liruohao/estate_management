@@ -73,15 +73,15 @@
 </template>
 
 <script>
-  export default {
-    name: 'sidebar',
-    data(){
-      return{
-        count:true,
-        drawer:false
-      }
+export default {
+  name: 'sidebar',
+  data () {
+    return {
+      count: true,
+      drawer: false
     }
   }
+}
 </script>
 
 <style scoped>

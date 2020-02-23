@@ -15,17 +15,17 @@
 </template>
 
 <script>
-import navbar from'../components/views/layout/navbar.vue'
-import siderbar from'../components/views/layout/sidebar'
-import appmin from'../components/views/layout/appmin'
+import navbar from '../components/views/layout/navbar.vue'
+import siderbar from '../components/views/layout/sidebar'
+import appmin from '../components/views/layout/appmin'
 
-  export default{
-    name:'index',
-    components:{
-      navbar,
-      siderbar
-    }
+export default{
+  name: 'index',
+  components: {
+    navbar,
+    siderbar
   }
+}
 </script>
 
 <style>
