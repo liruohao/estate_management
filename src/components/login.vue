@@ -2,7 +2,7 @@
   <div class="bglogin">
       <div>
         <div class="titleStyle">
-          世纪天城物业管理系统
+          sunshine物业管理系统
         </div>
         <div class="btnlogin">
           <div>
@@ -40,7 +40,7 @@ export default {
       if (this.formInline.password === '') {
         return this.$Message.warning('密码不能为空')
       }
-      this.$http.post('user/login', {
+      this.$http.get('user/login', {
         account: this.formInline.username,
         password: this.formInline.password
       }, res => {

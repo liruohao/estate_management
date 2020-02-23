@@ -38,6 +38,12 @@
             <MenuItem name="4-1" to="/staff">物业在职员工公告 </MenuItem>
             <MenuItem name="4-2" to="/owner">小区业主公告</MenuItem>
           </Submenu>
+          <Submenu name="5">
+            <template slot="title">
+              <Icon type="md-information-circle"></Icon> 个人信息
+            </template>
+            <MenuItem name="5-1" to="/people2">个人中心 </MenuItem>
+          </Submenu>
         </Menu>
       </Sider>
       <Layout style="width: 1500px">
@@ -54,12 +60,12 @@ export default {
       isCollapsed: false
     }
   },
-  methods:{
+  methods: {
     info (nodesc) {
       this.$Notice.info({
         title: '消息',
-        desc: nodesc ? '' : '推荐使用谷歌浏览器或IE11浏览器！',
-      });
+        desc: nodesc ? '' : '推荐使用谷歌浏览器或IE11浏览器！'
+      })
     }
   },
   computed: {
@@ -70,8 +76,8 @@ export default {
       ]
     }
   },
-  mounted(){
-    this.info ()
+  mounted () {
+    this.info()
   }
 }
 </script>

@@ -20,6 +20,7 @@ import Contract from '@/components/views/Income/Contract/contract'
 
 import Owner from '@/components/views/Notice/Owner/owner'
 import Staff from '@/components/views/Notice/Staff/staff'
+import People2 from '@/components/views/People'
 
 Vue.use(Router)
 
@@ -33,6 +34,17 @@ export default new Router({
     {
       path: '/index',
       redirect: 'customer'
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: index,
+      rediect: '/people2',
+      children: [{
+        path: '/people2',
+        name: 'People2',
+        component: People2
+      }]
     },
     {
       path: '/index',

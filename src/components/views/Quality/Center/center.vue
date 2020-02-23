@@ -200,519 +200,516 @@
 </template>
 
 <script>
-  export default {
-    name: 'center',
-    data () {
-      return {
-        columns2: [
-          {
-            type: 'selection',
-            width: 50,
-            align: 'center',
-            fixed: 'left'
-          },
-          {
-            title: '报修时间',
-            slot: 'Time',
-            align:'center',
-            width: 100,
-            fixed: 'left'
-          },
-          {
-            title: '报修编号',
-            slot: 'Number',
-            align:'center',
-            width: 100,
-            fixed: 'left'
-          },
-          {
-            title: '报修位置',
-            slot: 'Address',
-            align:'center',
-            width: 100,
-            fixed: 'left'
-          },
-          {
-            title: '报修类别',
-            align:'center',
-            slot: 'RepairCategory',
-            width: 100
-          },
-          {
-            title: '接报人',
-            align:'center',
-            slot: 'Receiver',
-            width: 100
-          },
-          {
-            title: '报修人',
-            align:'center',
-            slot: 'People',
-            width: 100
-          },
-          {
-            title: '客户类型',
-            align:'center',
-            slot: 'Type',
-            width: 100
-          },
-          {
-            title: '联系电话',
-            align:'center',
-            slot: 'Telephone',
-            width: 100
-          },
-          {
-            title: '紧急程度',
-            align:'center',
-            slot: 'Degree',
-            width: 100
-          },
-          {
-            title: '维修项目',
-            slot: 'Project',
-            align:'center',
-            width: 100
-          },
-          {
-            title: '维修内容',
-            slot: 'Content',
-            align:'center',
-            width: 200
-          },
-          {
-            title: '操作',
-            slot: 'action',
-            align:'center',
-            fixed: 'right',
-            width: 150
-          }
-        ],
-        dataAdd: [],
-        editvisit: -1,
-        editwork: -1,
-        editIndex: -1,
-        editTime:[],
-        editNumber:[],
-        editAddress:[],
-        editRepairCategory:[],
-        editReceiver:[],
-        editPeople:[],
-        editType:[],
-        editTelephone:[],
-        editDegree:[],
-        editProject:[],
-        editContent:[],
+export default {
+  name: 'center',
+  data () {
+    return {
+      columns2: [
+        {
+          type: 'selection',
+          width: 50,
+          align: 'center',
+          fixed: 'left'
+        },
+        {
+          title: '报修时间',
+          slot: 'Time',
+          align: 'center',
+          width: 100,
+          fixed: 'left'
+        },
+        {
+          title: '报修编号',
+          slot: 'Number',
+          align: 'center',
+          width: 100,
+          fixed: 'left'
+        },
+        {
+          title: '报修位置',
+          slot: 'Address',
+          align: 'center',
+          width: 100,
+          fixed: 'left'
+        },
+        {
+          title: '报修类别',
+          align: 'center',
+          slot: 'RepairCategory',
+          width: 100
+        },
+        {
+          title: '接报人',
+          align: 'center',
+          slot: 'Receiver',
+          width: 100
+        },
+        {
+          title: '报修人',
+          align: 'center',
+          slot: 'People',
+          width: 100
+        },
+        {
+          title: '客户类型',
+          align: 'center',
+          slot: 'Type',
+          width: 100
+        },
+        {
+          title: '联系电话',
+          align: 'center',
+          slot: 'Telephone',
+          width: 100
+        },
+        {
+          title: '紧急程度',
+          align: 'center',
+          slot: 'Degree',
+          width: 100
+        },
+        {
+          title: '维修项目',
+          slot: 'Project',
+          align: 'center',
+          width: 100
+        },
+        {
+          title: '维修内容',
+          slot: 'Content',
+          align: 'center',
+          width: 200
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          align: 'center',
+          fixed: 'right',
+          width: 150
+        }
+      ],
+      dataAdd: [],
+      editvisit: -1,
+      editwork: -1,
+      editIndex: -1,
+      editTime: [],
+      editNumber: [],
+      editAddress: [],
+      editRepairCategory: [],
+      editReceiver: [],
+      editPeople: [],
+      editType: [],
+      editTelephone: [],
+      editDegree: [],
+      editProject: [],
+      editContent: [],
 
-        //新增
-        Addindex:{
-          editTime:'',
-          editNumber:'',
-          editAddress:'',
-          editRepairCategory:'',
-          editReceiver:'',
-          editPeople:'',
-          editType:'',
-          editTelephone:'',
-          editDegree:'',
-          editProject:'',
-          editContent:'',
-        },
-        //模态框默认值
-        modalAdd:false,
+      // 新增
+      Addindex: {
+        editTime: '',
+        editNumber: '',
+        editAddress: '',
+        editRepairCategory: '',
+        editReceiver: '',
+        editPeople: '',
+        editType: '',
+        editTelephone: '',
+        editDegree: '',
+        editProject: '',
+        editContent: ''
+      },
+      // 模态框默认值
+      modalAdd: false,
 
-        //派工表头
-        worker: [
-          {
-            title: '报修时间',
-            key: 'workTime',
-            align:'center',
-          },
-          {
-            title: '完工时间',
-            slot: 'workEndTime',
-            align:'center',
-          },
-          {
-            title: '报修编号',
-            key: 'workNum',
-            align:'center',
-          },
-          {
-            title: '报修地点',
-            key: 'workAddress',
-            align:'center',
-          },
-          {
-            title: '报修人',
-            key: 'worker',
-            align:'center',
-          },
-          {
-            title: '报修项目',
-            key: 'workProject',
-            align:'center',
-          },
-          {
-            title: '维修人员',
-            slot: 'workattendant',
-            align:'center',
-          },
-          {
-            title: '报修状态',
-            slot: 'workState',
-            align:'center',
-          },
-          {
-            title: '操作',
-            slot: 'workAction',
-            align:'center',
-            width: 200
-          }
-          ],
-        workerData:[],
+      // 派工表头
+      worker: [
+        {
+          title: '报修时间',
+          key: 'workTime',
+          align: 'center'
+        },
+        {
+          title: '完工时间',
+          slot: 'workEndTime',
+          align: 'center'
+        },
+        {
+          title: '报修编号',
+          key: 'workNum',
+          align: 'center'
+        },
+        {
+          title: '报修地点',
+          key: 'workAddress',
+          align: 'center'
+        },
+        {
+          title: '报修人',
+          key: 'worker',
+          align: 'center'
+        },
+        {
+          title: '报修项目',
+          key: 'workProject',
+          align: 'center'
+        },
+        {
+          title: '维修人员',
+          slot: 'workattendant',
+          align: 'center'
+        },
+        {
+          title: '报修状态',
+          slot: 'workState',
+          align: 'center'
+        },
+        {
+          title: '操作',
+          slot: 'workAction',
+          align: 'center',
+          width: 200
+        }
+      ],
+      workerData: [],
 
-        //回访表头
-        visit:[
-          {
-            title: '报修编号',
-            key: 'visitNum',
-            align:'center',
-          },
-          {
-            title: '报修地点',
-            key: 'visitAddress',
-            align:'center',
-          },
-          {
-            title: '报修人',
-            key: 'visitpeople',
-            align:'center',
-          },
-          {
-            title: '报修项目',
-            key: 'visitProject',
-            align:'center',
-          },
-          {
-            title: '维修人员',
-            key: 'visitattendant',
-            align:'center',
-          },
-          {
-            title: '报修状态',
-            key: 'visitState',
-            align:'center',
-          },
-          {
-            title: '回访满意度',
-            slot: 'Satisfied',
-            align:'center',
-          },
-          {
-            title: '操作',
-            slot: 'Editfried',
-            align:'center',
+      // 回访表头
+      visit: [
+        {
+          title: '报修编号',
+          key: 'visitNum',
+          align: 'center'
+        },
+        {
+          title: '报修地点',
+          key: 'visitAddress',
+          align: 'center'
+        },
+        {
+          title: '报修人',
+          key: 'visitpeople',
+          align: 'center'
+        },
+        {
+          title: '报修项目',
+          key: 'visitProject',
+          align: 'center'
+        },
+        {
+          title: '维修人员',
+          key: 'visitattendant',
+          align: 'center'
+        },
+        {
+          title: '报修状态',
+          key: 'visitState',
+          align: 'center'
+        },
+        {
+          title: '回访满意度',
+          slot: 'Satisfied',
+          align: 'center'
+        },
+        {
+          title: '操作',
+          slot: 'Editfried',
+          align: 'center'
+        }
+      ],
+      visiter: '',
+      visitData: [],
+      visitTransmit: {
+        'visitNum': '',
+        'visitAddress': '',
+        'visitpeople': '',
+        'visitProject': '',
+        'visitattendant': '',
+        'visitState': '',
+        'Satisfied': ''
+      },
+      temporaryNumb: '',
+      temporaryAddresss: '',
+      temporaryPeople: '',
+      temporaryProject: '',
+      visititem: {
+        'visitNum': '',
+        'visitAddress': '',
+        'visitpeople': '',
+        'visitProject': '',
+        'visitattendant': '',
+        'visitState': ''
+      },
+      workAddData: {
+        workEditTime: '',
+        workEditNum: '',
+        workEditAddress: '',
+        workerEdit: '',
+        workEditProject: '',
+        workEditEndTime: '',
+        workEditattendant: '',
+        workEditState: ''
+      },
+      itemArray: {
+        workTime: '',
+        workEndTime: '',
+        workNum: '',
+        workAddress: '',
+        worker: '',
+        workProject: '',
+        workattendant: '',
+        workState: ''
+      },
+      addhot: 0, // 暖通
+      addpower: 0, // 强电
+      adddownpower: 0, // 弱电
+      addfix: 0, // 保修
+      watter: 0, // 给排水
+      comprehensive: 0, // 综合
+      iframeSatisfied: 0, // 满意
+      UniframeSatisfied: 0// 不满意
+    }
+  },
+  methods: {
+    // 分页管理, 获取历史记录信息
+    handleListApproveHistory () {
+      // 通过JSON引入数据
+      this.$http.get('/api/dataAdd').then((response) => {
+        response = response.body
+        // // 保存取到的所有数据
+        this.dataAdd = response.data
+      })
+      this.$http.get('/api/workerData').then((response) => {
+        response = response.body
+        // // 保存取到的所有数据
+        this.workerData = response.data
+      })
+      this.$http.get('/api/visiter').then((response) => {
+        response = response.body
+        // // 保存取到的所有数据
+        this.visitData = response.data
+        for (let j = 0; j < this.visitData.length; j++) {
+          console.log(this.visitData[j].visitProject)
+          if (this.visitData[j].visitProject === '暖通') {
+            this.addhot += 1
           }
-        ],
-        visiter:'',
-        visitData:[],
-        visitTransmit:{
-          "visitNum": "",
-          "visitAddress":"",
-          "visitpeople": "",
-          "visitProject": "",
-          "visitattendant": "",
-          "visitState": "",
-          "Satisfied": ""
-        },
-        temporaryNumb:'',
-        temporaryAddresss:'',
-        temporaryPeople:'',
-        temporaryProject:'',
-        visititem:{
-          "visitNum": "",
-          "visitAddress":"",
-          "visitpeople": "",
-          "visitProject": "",
-          "visitattendant": "",
-          "visitState": ""
-        },
-        workAddData:{
-          workEditTime:'',
-          workEditNum:'',
-          workEditAddress:'',
-          workerEdit:'',
-          workEditProject:'',
-          workEditEndTime:'',
-          workEditattendant:'',
-          workEditState:'',
-        },
-        itemArray:{
-          workTime:'',
-          workEndTime:'',
-          workNum:'',
-          workAddress:'',
-          worker:'',
-          workProject:'',
-          workattendant:'',
-          workState:'',
-        },
-        addhot:0,//暖通
-        addpower:0,//强电
-        adddownpower:0,//弱电
-        addfix:0,//保修
-        watter:0,//给排水
-        comprehensive:0,//综合
-        iframeSatisfied:0,//满意
-        UniframeSatisfied:0,//不满意
-      }
-    },
-    methods:{
-      //分页管理, 获取历史记录信息
-      handleListApproveHistory(){
-        //通过JSON引入数据
-        this.$http.get('/api/dataAdd').then((response)=>{
-          response=response.body;
-          // // 保存取到的所有数据
-          this.dataAdd = response.data;
+          if (this.visitData[j].visitProject === '强电') {
+            this.addpower += 1
+          }
+          if (this.visitData[j].visitProject === '弱电') {
+            this.adddownpower += 1
+          }
+          if (this.visitData[j].visitProject === '保修服务') {
+            this.addfix += 1
+          }
+          if (this.visitData[j].visitProject === '给排水') {
+            this.watter += 1
+          }
+          if (this.visitData[j].visitProject === '综合维修') {
+            this.comprehensive += 1
+          }
+          if (this.visitData[j].Satisfied === '满意') {
+            this.iframeSatisfied += 1
+          } if (this.visitData[j].visitProject === '综合维修') {
+            this.UniframeSatisfied += 1
+          }
+        }
+        var echarts = require('echarts')
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'))
+        // 绘制图表
+        myChart.setOption({
+          title: {
+            text: '报修项目统计'
+          },
+          tooltip: {},
+          xAxis: {
+            data: ['暖通', '强电', '弱电', '保修服务', '给排水', '综合维修']
+          },
+          yAxis: {},
+          series: [{
+            name: '投诉统计',
+            type: 'bar',
+            data: [this.addhot, this.addpower, this.adddownpower, this.addfix, this.watter, this.comprehensive]
+          }]
         })
-        this.$http.get('/api/workerData').then((response)=>{
-          response=response.body;
-          // // 保存取到的所有数据
-          this.workerData = response.data;
-        })
-        this.$http.get('/api/visiter').then((response)=>{
-          response=response.body;
-          // // 保存取到的所有数据
-          this.visitData = response.data;
-          for(let j=0;j<this.visitData.length;j++){
-            console.log(this.visitData[j].visitProject)
-            if(this.visitData[j].visitProject==='暖通'){
-              this.addhot+=1;
-            }
-            if(this.visitData[j].visitProject==='强电') {
-              this.addpower+=1;
-            }
-            if(this.visitData[j].visitProject==='弱电') {
-              this.adddownpower+=1;
-            }
-            if(this.visitData[j].visitProject==='保修服务') {
-              this.addfix+=1;
-            }
-            if(this.visitData[j].visitProject==='给排水') {
-              this.watter+=1;
-            }
-            if(this.visitData[j].visitProject==='综合维修') {
-              this.comprehensive+=1;
-            }
-            if(this.visitData[j].Satisfied==='满意') {
-              this.iframeSatisfied+=1;
-            }if(this.visitData[j].visitProject==='综合维修') {
-              this.UniframeSatisfied+=1;
-            }
-          }
-          var echarts = require('echarts');
+        var cake = echarts.init(document.getElementById('cake'))
+        cake.setOption({
+          title: {
+            text: '满意度统计',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            // orient: 'vertical',
+            // top: 'middle',
+            bottom: 10,
+            left: 'center',
+            data: ['满意', '不满意']
+          },
+          series: [
+            {
+              type: 'pie',
+              radius: '65%',
+              center: ['50%', '50%'],
+              selectedMode: 'single',
+              data: [
 
-          // 基于准备好的dom，初始化echarts实例
-          var myChart = echarts.init(document.getElementById('main'));
-          // 绘制图表
-          myChart.setOption({
-            title: {
-              text: '报修项目统计'
-            },
-            tooltip: {},
-            xAxis: {
-              data: ['暖通', '强电', '弱电', '保修服务', '给排水', '综合维修']
-            },
-            yAxis: {},
-            series: [{
-              name: '投诉统计',
-              type: 'bar',
-              data: [this.addhot,this.addpower, this.adddownpower, this.addfix, this.watter, this.comprehensive]
-            }]
-          });
-          var cake = echarts.init(document.getElementById('cake'));
-          cake.setOption({
-            title: {
-              text: '满意度统计',
-              left: 'center'
-            },
-            tooltip : {
-              trigger: 'item',
-              formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-              // orient: 'vertical',
-              // top: 'middle',
-              bottom: 10,
-              left: 'center',
-              data: ['满意', '不满意']
-            },
-            series : [
-              {
-                type: 'pie',
-                radius : '65%',
-                center: ['50%', '50%'],
-                selectedMode: 'single',
-                data:[
-
-                  {value:this.iframeSatisfied, name: '满意'},
-                  {value:this.UniframeSatisfied, name: '不满意'}
-                ],
-                itemStyle: {
-                  emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                  }
+                {value: this.iframeSatisfied, name: '满意'},
+                {value: this.UniframeSatisfied, name: '不满意'}
+              ],
+              itemStyle: {
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
               }
-            ]
-          });
-
-        })
-      },
-      //修改信息
-      handleEdit (row, index) {
-        this.editTime = row.Time;
-        this.editNumber = row.Number;
-        this.editAddress = row.Address;
-        this.editRepairCategory = row.RepairCategory;
-        this.editReceiver = row.Receiver;
-        this.editPeople = row.People;
-        this.editType = row.Type;
-        this.editTelephone = row.Telephone;
-        this.editDegree = row.Degree;
-        this.editProject = row.Project;
-        this.editContent = row.Content;
-        this.editIndex = index;
-      },
-      handleSave (index) {
-        this.dataAdd[index].Time = this.editTime;
-        this.temporaryNumb=this.dataAdd[index].Number = this.editNumber;
-        this.temporaryAddresss=this.dataAdd[index].Address = this.editAddress;
-        this.dataAdd[index].RepairCategory = this.editRepairCategory;
-        this.dataAdd[index].Receiver = this.editReceiver;
-        this.temporaryPeople=this.dataAdd[index].People = this.editPeople;
-        this.dataAdd[index].Type = this.editType;
-        this.dataAdd[index].Telephone = this.editTelephone;
-        this.dataAdd[index].Degree = this.editDegree;
-        this.temporaryProject=this.dataAdd[index].Project = this.editProject;
-        this.dataAdd[index].Content = this.editContent;
-        this.editIndex = -1;
-        this.$Message.info('修改成功');
-      },
-      cancel(){
-        this.editIndex = -1,
-          this.$Message.error('取消修改');
-      },
-      //修改完工信息
-      handleEditwork(row, index){
-        this.workAddData.workEndTime=row.workEndTime;
-        this.workAddData.workattendant=row.workattendant;
-        this.workAddData.workState=row.workState;
-        this.editwork = index;
-      },
-      //保存
-      handleWorkSave(index){
-        this.workerData[index].workEndTime=this.workAddData.workEditEndTime;
-        this.visititem.visitattendant=this.workerData[index].workattendant=this.workAddData.workEditattendant;
-        this.visititem.visitState=this.workerData[index].workState=this.workAddData.workEditState;
-
-        this.editwork = -1;
-        console.log(this.workerData[index].workEndTime+'+'+this.workerData[index].workattendant+'+'+this.workerData[index].workState)
-        this.$Message.info('修改成功');
-      },
-      cancelWork(){
-        this.editwork = -1;
-          this.$Message.error('取消修改');
-      },
-      //回访传值
-      handleReturnVisit(){
-        this.visititem.visitNum=this.temporaryNumb;
-        this.visititem.visitAddress=this.temporaryAddresss;
-        this.visititem.visitpeople=this.temporaryPeople;
-        this.visititem.visitProject=this.temporaryProject;
-        this.visitData.push(this.visititem);
-        console.log(this.temporaryNumb)
-
-      },
-      //回访修改
-      handleEditvisit(row,index){
-        this.editvisit =index
-      },
-      //回访确认
-      handlevisitSave(index){
-        this.visitData[index].Satisfied = this.visiter;
-        this.editvisit = -1;
-        this.$Message.info('修改成功');
-      },
-      //取消
-      cancelvisit(){
-        this.editvisit = -1;
-        this.$Message.error('取消修改');
-      },
-      //查看
-      show (index) {
-        this.$Modal.info({
-          title: '查看',
-          content: `报修时间：${this.dataAdd[index].Time}<br>报修编号：${this.dataAdd[index].Number}<br>报修位置：${this.dataAdd[index].Address}<br>报修类别：${this.dataAdd[index].RepairCategory}<br>接报人：${this.dataAdd[index].Receiver}<br>报修人：${this.dataAdd[index].People}<br>客户类型：${this.dataAdd[index].Type}<br>联系电话：${this.dataAdd[index].editTelephone}<br>紧急程度：${this.dataAdd[index].Degree}<br>维修项目：${this.dataAdd[index].Project}<br>维修内容：${this.dataAdd[index].Content}`
-        })
-      },
-      //删除操作
-      handleSelectAll (status) {
-        for (let i = 0; i < this.dataAdd.length; i++) {
-          for (let j = 0; j < this.showdata.length; j++) {
-            if (this.dataAdd[i].id === this.showdata[j].id) {
-              this.dataAdd.splice(i, 1)
             }
+          ]
+        })
+      })
+    },
+    // 修改信息
+    handleEdit (row, index) {
+      this.editTime = row.Time
+      this.editNumber = row.Number
+      this.editAddress = row.Address
+      this.editRepairCategory = row.RepairCategory
+      this.editReceiver = row.Receiver
+      this.editPeople = row.People
+      this.editType = row.Type
+      this.editTelephone = row.Telephone
+      this.editDegree = row.Degree
+      this.editProject = row.Project
+      this.editContent = row.Content
+      this.editIndex = index
+    },
+    handleSave (index) {
+      this.dataAdd[index].Time = this.editTime
+      this.temporaryNumb = this.dataAdd[index].Number = this.editNumber
+      this.temporaryAddresss = this.dataAdd[index].Address = this.editAddress
+      this.dataAdd[index].RepairCategory = this.editRepairCategory
+      this.dataAdd[index].Receiver = this.editReceiver
+      this.temporaryPeople = this.dataAdd[index].People = this.editPeople
+      this.dataAdd[index].Type = this.editType
+      this.dataAdd[index].Telephone = this.editTelephone
+      this.dataAdd[index].Degree = this.editDegree
+      this.temporaryProject = this.dataAdd[index].Project = this.editProject
+      this.dataAdd[index].Content = this.editContent
+      this.editIndex = -1
+      this.$Message.info('修改成功')
+    },
+    cancel () {
+      this.editIndex = -1,
+      this.$Message.error('取消修改')
+    },
+    // 修改完工信息
+    handleEditwork (row, index) {
+      this.workAddData.workEndTime = row.workEndTime
+      this.workAddData.workattendant = row.workattendant
+      this.workAddData.workState = row.workState
+      this.editwork = index
+    },
+    // 保存
+    handleWorkSave (index) {
+      this.workerData[index].workEndTime = this.workAddData.workEditEndTime
+      this.visititem.visitattendant = this.workerData[index].workattendant = this.workAddData.workEditattendant
+      this.visititem.visitState = this.workerData[index].workState = this.workAddData.workEditState
+
+      this.editwork = -1
+      console.log(this.workerData[index].workEndTime + '+' + this.workerData[index].workattendant + '+' + this.workerData[index].workState)
+      this.$Message.info('修改成功')
+    },
+    cancelWork () {
+      this.editwork = -1
+      this.$Message.error('取消修改')
+    },
+    // 回访传值
+    handleReturnVisit () {
+      this.visititem.visitNum = this.temporaryNumb
+      this.visititem.visitAddress = this.temporaryAddresss
+      this.visititem.visitpeople = this.temporaryPeople
+      this.visititem.visitProject = this.temporaryProject
+      this.visitData.push(this.visititem)
+      console.log(this.temporaryNumb)
+    },
+    // 回访修改
+    handleEditvisit (row, index) {
+      this.editvisit = index
+    },
+    // 回访确认
+    handlevisitSave (index) {
+      this.visitData[index].Satisfied = this.visiter
+      this.editvisit = -1
+      this.$Message.info('修改成功')
+    },
+    // 取消
+    cancelvisit () {
+      this.editvisit = -1
+      this.$Message.error('取消修改')
+    },
+    // 查看
+    show (index) {
+      this.$Modal.info({
+        title: '查看',
+        content: `报修时间：${this.dataAdd[index].Time}<br>报修编号：${this.dataAdd[index].Number}<br>报修位置：${this.dataAdd[index].Address}<br>报修类别：${this.dataAdd[index].RepairCategory}<br>接报人：${this.dataAdd[index].Receiver}<br>报修人：${this.dataAdd[index].People}<br>客户类型：${this.dataAdd[index].Type}<br>联系电话：${this.dataAdd[index].editTelephone}<br>紧急程度：${this.dataAdd[index].Degree}<br>维修项目：${this.dataAdd[index].Project}<br>维修内容：${this.dataAdd[index].Content}`
+      })
+    },
+    // 删除操作
+    handleSelectAll (status) {
+      for (let i = 0; i < this.dataAdd.length; i++) {
+        for (let j = 0; j < this.showdata.length; j++) {
+          if (this.dataAdd[i].id === this.showdata[j].id) {
+            this.dataAdd.splice(i, 1)
           }
-        }
-      },
-      // 复选框选择的数据
-      dataChange (data) {
-        this.showdata = data
-      },
-      //新增
-      handleAdd(){
-        this.modalAdd=true
-      },
-      addCancel () {
-        let array={};
-        array.Time=this.Addindex.editTime;
-        this.temporaryNumb=array.Number=this.Addindex.editNumber;
-        this.temporaryAddresss=array.Address=this.Addindex.editAddress;
-        array.RepairCategory=this.Addindex.editRepairCategory;
-        array.Receiver=this.Addindex.editReceiver;
-        this.temporaryPeople=array.People=this.Addindex.editPeople;
-        array.Type=this.Addindex.editType;
-        array.Telephone=this.Addindex.editTelephone;
-        array.Degree=this.Addindex.editDegree;
-        this.temporaryProject=array.Project=this.Addindex.editProject;
-        array.Content=this.Addindex.editContent;
-
-
-        if((array.Time.length!=0)&(array.Number.length!=0)&(array.Address.length!=0)&(array.RepairCategory.length!=0)&(array.Receiver.length!=0)&(array.People.length!=0)&(array.Type.length!=0)&(array.Telephone.length!=0)&(array.Degree.length!=0)&(array.Project.length!=0)&(array.Content.length!=0)){
-          this.dataAdd.push(array);
-          this.itemArray.workTime=array.Time;
-          this.itemArray.workNum=array.Number;
-          this.itemArray.workAddress=array.Address;
-          this.itemArray.worker=array.People;
-          this.itemArray.workProject=array.Project;
-
-          console.log(this.itemArray);
-          this.workerData.push(this.itemArray);
-          this.$Message.success('新增成功');
-        }else {
-          alert('请补全以上信息')
         }
       }
     },
-    mounted(){
-      this.handleListApproveHistory();
+    // 复选框选择的数据
+    dataChange (data) {
+      this.showdata = data
+    },
+    // 新增
+    handleAdd () {
+      this.modalAdd = true
+    },
+    addCancel () {
+      let array = {}
+      array.Time = this.Addindex.editTime
+      this.temporaryNumb = array.Number = this.Addindex.editNumber
+      this.temporaryAddresss = array.Address = this.Addindex.editAddress
+      array.RepairCategory = this.Addindex.editRepairCategory
+      array.Receiver = this.Addindex.editReceiver
+      this.temporaryPeople = array.People = this.Addindex.editPeople
+      array.Type = this.Addindex.editType
+      array.Telephone = this.Addindex.editTelephone
+      array.Degree = this.Addindex.editDegree
+      this.temporaryProject = array.Project = this.Addindex.editProject
+      array.Content = this.Addindex.editContent
+
+      if ((array.Time.length != 0) & (array.Number.length != 0) & (array.Address.length != 0) & (array.RepairCategory.length != 0) & (array.Receiver.length != 0) & (array.People.length != 0) & (array.Type.length != 0) & (array.Telephone.length != 0) & (array.Degree.length != 0) & (array.Project.length != 0) & (array.Content.length != 0)) {
+        this.dataAdd.push(array)
+        this.itemArray.workTime = array.Time
+        this.itemArray.workNum = array.Number
+        this.itemArray.workAddress = array.Address
+        this.itemArray.worker = array.People
+        this.itemArray.workProject = array.Project
+
+        console.log(this.itemArray)
+        this.workerData.push(this.itemArray)
+        this.$Message.success('新增成功')
+      } else {
+        alert('请补全以上信息')
+      }
     }
+  },
+  mounted () {
+    this.handleListApproveHistory()
   }
+}
 </script>
 
 <style scoped>
@@ -773,6 +770,5 @@
   .tabalign{
     margin: 0 auto;
   }
-
 
 </style>
