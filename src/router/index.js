@@ -21,6 +21,7 @@ import Contract from '@/components/views/Income/Contract/contract'
 import Owner from '@/components/views/Notice/Owner/owner'
 import Staff from '@/components/views/Notice/Staff/staff'
 import People2 from '@/components/views/People'
+import Password from '@/components/views/Password'
 
 Vue.use(Router)
 
@@ -44,6 +45,17 @@ export default new Router({
         path: '/people2',
         name: 'People2',
         component: People2
+      }]
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: index,
+      rediect: '/password',
+      children: [{
+        path: '/password',
+        name: 'Password',
+        component: Password
       }]
     },
     {

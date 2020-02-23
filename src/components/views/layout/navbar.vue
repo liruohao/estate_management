@@ -43,6 +43,7 @@
               <Icon type="md-information-circle"></Icon> 个人信息
             </template>
             <MenuItem name="5-1" to="/people2">个人中心 </MenuItem>
+            <MenuItem name="5-2" to="/Password">修改密码 </MenuItem>
           </Submenu>
         </Menu>
       </Sider>

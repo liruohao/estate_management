@@ -48,6 +48,9 @@ export default {
           this.$router.push({
             name: 'Customer'
           })
+          res.data.passwd = ''
+          res.data.passwdCheck = ''
+          sessionStorage.setItem('user', JSON.stringify(res.data))
         } else {
           this.$Message.warning(res.message)
         }
