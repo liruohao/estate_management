@@ -9,38 +9,25 @@
       </Breadcrumb>
     </div>
     <div class="operation">
-      <div>
-        <table width="100%">
-          <tr>
-            <td>
-              <span class="fontFloat">车位编号:</span>
-              <Input v-model="select.carNum" style="width: 80%" />
-            </td>
-            <td class="tabfloat">
-              <span class="fontFloat">位置:</span>
-              <Input v-model="select.position" style="width: 80%" />
-            </td>
-            <td  class="tabfloat">
-              <span class="fontFloat">承租人:</span>
-              <Input v-model="select.Lessee" style="width: 80%" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <span class="fontFloat">车牌号:</span>
-              <Input v-model="select.licensePlate"  style="width: 85%"></Input>
-            </td>
-            <td class="tabfloat" style="padding-left: 3.2%">
-              <span class="fontspecifications">停车证号:</span>
-              <Input v-model="select.parkinPermit  " style="width: 72%" />
-            </td>
-            <td class="tabbut">
-              <Button type="primary" style="width: 80%" @click="handleListApproveHistory">查询</Button>
-            </td>
-          </tr>
-        </table>
-
-      </div>
+      <Form :model="select" :label-width="100" inline>
+        <FormItem label="车位编号：">
+          <Input v-model="select.carNum" clearable/>
+        </FormItem>
+        <FormItem label="位置：">
+          <Input v-model="select.position" clearable/>
+        </FormItem>
+        <FormItem label="承租人：">
+          <Input v-model="select.lessee" clearable/>
+        </FormItem>
+        <FormItem label="车牌号：">
+          <Input v-model="select.licensePlate" clearable/>
+        </FormItem>
+        <FormItem label="停车证号：">
+          <Input v-model="select.parkinPermit" clearable/>
+        </FormItem>
+        <Button type="primary" @click="handleListApproveHistory">查询</Button>
+        <Button type="primary" @click="resetSearch">重置</Button>
+      </Form>
       <div>
         <Button class="findTab" type="info" @click="addData">增加</Button>
         <Button class="findTab" type="error" @click="handleSelectAll">删除</Button>
@@ -63,13 +50,13 @@
           <span v-else>{{ row.position }}</span>
         </template>
 
-        <template slot-scope="{ row, index }" slot="Lessee">
-          <Input type="text" v-model="editLessee" v-if="editIndex === index" />
-          <span v-else>{{ row.Lessee }}</span>
+        <template slot-scope="{ row, index }" slot="lessee">
+          <Input type="text" v-model="editlessee" v-if="editIndex === index" />
+          <span v-else>{{ row.lessee }}</span>
         </template>
 
         <template slot-scope="{ row, index }" slot="licensePlate">
-          <Input type="text" v-model="editLessee" v-if="editIndex === index" />
+          <Input type="text" v-model="editlessee" v-if="editIndex === index" />
           <span v-else>{{ row.licensePlate }}</span>
         </template>
 
@@ -84,12 +71,12 @@
         </template>
 
         <template slot-scope="{ row, index }" slot="startTime">
-          <Input type="text" v-model="editstartTime" v-if="editIndex === index" />
+          <DatePicker transfer type="datetime" format="yyyy-MM-dd HH:mm:ss"  v-model="editstartTime" v-if="editIndex === index"></DatePicker>
           <span v-else>{{ row.startTime }}</span>
         </template>
 
         <template slot-scope="{ row, index }" slot="endTime">
-          <Input type="text" v-model="editendTime" v-if="editIndex === index" />
+          <DatePicker  transfer type="datetime" format="yyyy-MM-dd HH:mm:ss"  v-model="editendTime" v-if="editIndex === index"></DatePicker>
           <span v-else>{{ row.endTime }}</span>
         </template>
 
@@ -100,7 +87,7 @@
 
         <template slot-scope="{ row, index }" slot="action">
           <div v-if="editIndex === index">
-            <Button @click="handleSave(index)">保存</Button>
+            <Button @click="handleSave(index, row)">保存</Button>
             <Button @click="cancel">取消</Button>
           </div>
           <div v-else>
@@ -129,6 +116,7 @@
            position="relative"
            @on-ok="modalAdd" @on-cancel="modalExit"
            margin-top="5px" :title="modalTtile"
+           @on-visible-change="modalChange"
            :footer-hide="this.falg ===3">
       <Form ref="formInline"  :model="formItem" :label-width="80" inline>
         <FormItem label="停车场" class="titfloat">
@@ -141,7 +129,7 @@
           <Input id="rubric" value="${this.formItem.position}"  v-model="formItem.position" placeholder="请输入位置" :disabled="this.falg ===3"></Input>
         </FormItem>
         <FormItem label="承租人" class="titfloat">
-          <Input id="rubric" value="${this.formItem.Lessee}"  v-model="formItem.Lessee" placeholder="请输入承租人" :disabled="this.falg ===3"></Input>
+          <Input id="rubric" value="${this.formItem.lessee}"  v-model="formItem.lessee" placeholder="请输入承租人" :disabled="this.falg ===3"></Input>
         </FormItem>
         <FormItem label="车牌号" class="titfloat">
           <Input id="rubric" value="${this.formItem.licensePlate}"  v-model="formItem.licensePlate" placeholder="请输入车牌号" :disabled="this.falg ===3"></Input>
@@ -153,10 +141,10 @@
           <Input id="rubric" value="${this.formItem.telephone}"  v-model="formItem.telephone" placeholder="请输入电话" :disabled="this.falg ===3"></Input>
         </FormItem>
         <FormItem label="开始日期" class="titfloat">
-          <Input id="rubric" value="${this.formItem.startTime}"  v-model="formItem.startTime" placeholder="请输入开始日期" :disabled="this.falg ===3"></Input>
+          <DatePicker type="datetime" format="yyyy-MM-dd HH:mm:ss"value="${this.formItem.startTime}" style="width: 150px"  v-model="formItem.startTime" placeholder="请输入开始日期" :disabled="this.falg ===3"></DatePicker>
         </FormItem>
         <FormItem label="结束日期" class="titfloat">
-          <Input id="rubric" value="${this.formItem.endTime}"  v-model="formItem.endTime" placeholder="请输入结束日期" :disabled="this.falg ===3"></Input>
+          <DatePicker type="datetime" format="yyyy-MM-dd HH:mm:ss"  value="${this.formItem.endTime}" style="width: 150px"  v-model="formItem.endTime" placeholder="请输入结束日期" :disabled="this.falg ===3"></DatePicker>
         </FormItem>
         <FormItem label="缴费" class="titfloat">
           <Input id="rubric" value="${this.formItem.pay}"  v-model="formItem.pay" placeholder="请输入缴费" :disabled="this.falg ===3"></Input>
@@ -204,7 +192,7 @@ export default {
         },
         {
           title: '承租人',
-          slot: 'Lessee',
+          slot: 'lessee',
           align: 'center',
           width: 150
         },
@@ -255,6 +243,7 @@ export default {
       dataCount: 0,
       // 每页显示多少条
       pageSize: 10,
+      showdata: '',
       // 当前页码
       page: 1,
       // 分页传参条数
@@ -268,13 +257,14 @@ export default {
         carPark: '',
         carNum: '',
         position: '',
-        Lessee: '',
+        lessee: '',
         licensePlate: '',
         parkinPermit: '',
         telephone: '',
         startTime: '',
         endTime: '',
-        pay: ''
+        pay: '',
+        id: ''
       },
       model1: '',
       carParkList: [],
@@ -282,7 +272,7 @@ export default {
         carPark: '',
         carNum: '',
         position: '',
-        Lessee: '',
+        lessee: '',
         licensePlate: '',
         parkinPermit: '',
         telephone: '',
@@ -296,7 +286,7 @@ export default {
       editcarPark: '',
       editcarNum: '',
       editposition: '',
-      editLessee: '',
+      editlessee: '',
       editlicensePlate: '',
       editparkinPermit: '',
       edittelephone: '',
@@ -308,22 +298,43 @@ export default {
   },
   components: {tooLbar},
   methods: {
+    modalChange (flag) {
+      if (!flag) {
+        for (let i in this.formItem) {
+          this.formItem[i] = ''
+        }
+      }
+    },
+    resetSearch () {
+      for (let i in this.select) {
+        this.select[i] = ''
+      }
+      this.handleListApproveHistory()
+    },
+    pageChange (page) {
+      this.pcontractname = page
+      this.handleListApproveHistory()
+    },
+    pageSizeChange (pageSize) {
+      this.pcontractnameSize = pageSize
+      this.handleListApproveHistory()
+    },
     // 查询
     selectData () {
       let array = []
       array.carPark = this.select.carPark
       array.carNum = this.select.carNum
       array.position = this.select.position
-      array.Lessee = this.select.Lessee
+      array.lessee = this.select.lessee
       array.licensePlate = this.select.licensePlate
       array.parkinPermit = this.select.parkinPermit
       array.telephone = this.select.telephone
-      array.startTime = this.select.startTime
-      array.endTime = this.select.endTime
+      array.startTime = this.$dateFormat(new Date(this.select.startTime), 'yyyy-MM-dd')
+      array.endTime = this.$dateFormat(new Date(this.select.endTime), 'yyyy-MM-dd')
       array.pay = this.select.pay
 
       this.historyData = this.historyData.filter(function (item) {
-        return ((item.carPark == array.carPark && item.carNum == array.carNum && item.position == array.position && item.Lessee == array.Lessee && item.licensePlate == array.licensePlate && item.parkinPermit == array.parkinPermit && item.telephone == array.telephone && item.startTime == array.startTime && item.endTime == array.endTime && item.pay == array.pay) || (item.carPark == array.carPark || item.carNum == array.carNum || item.position == array.position || item.Lessee == array.Lessee || item.licensePlate == array.licensePlate || item.parkinPermit == array.parkinPermit || item.telephone == array.telephone || item.startTime == array.startTime || item.endTime == array.endTime || item.pay == array.pay))
+        return ((item.carPark == array.carPark && item.carNum == array.carNum && item.position == array.position && item.lessee == array.lessee && item.licensePlate == array.licensePlate && item.parkinPermit == array.parkinPermit && item.telephone == array.telephone && item.startTime == array.startTime && item.endTime == array.endTime && item.pay == array.pay) || (item.carPark == array.carPark || item.carNum == array.carNum || item.position == array.position || item.lessee == array.lessee || item.licensePlate == array.licensePlate || item.parkinPermit == array.parkinPermit || item.telephone == array.telephone || item.startTime == array.startTime || item.endTime == array.endTime || item.pay == array.pay))
       })
     },
 
@@ -332,7 +343,7 @@ export default {
       this.editcarPark = row.carPark
       this.editcarNum = row.carNum
       this.editposition = row.position
-      this.editLessee = row.Lessee
+      this.editlessee = row.lessee
       this.editlicensePlate = row.licensePlate
       this.editparkinPermit = row.parkinPermit
       this.edittelephone = row.telephone
@@ -342,19 +353,21 @@ export default {
       this.id = row.id
       this.editIndex = index
     },
-    handleSave (index) {
-      this.historyData[index].carPark = this.editcarPark
-      this.historyData[index].carNum = this.editcarNum
-      this.historyData[index].position = this.editposition
-      this.historyData[index].Lessee = this.editLessee
-      this.historyData[index].licensePlate = this.editlicensePlate
-      this.historyData[index].parkinPermit = this.editparkinPermit
-      this.historyData[index].telephone = this.edittelephone
-      this.historyData[index].startTime = this.editstartTime
-      this.historyData[index].endTime = this.editendTime
-      this.historyData[index].pay = this.editpay
+    handleSave (index, row) {
+      this.formItem.carPark = this.editcarPark
+      this.formItem.carNum = this.editcarNum
+      this.formItem.position = this.editposition
+      this.formItem.lessee = this.editlessee
+      this.formItem.licensePlate = this.editlicensePlate
+      this.formItem.parkinPermit = this.editparkinPermit
+      this.formItem.telephone = this.edittelephone
+      this.formItem.startTime = this.editstartTime
+      this.formItem.endTime = this.editendTime
+      this.formItem.pay = this.editpay
+      this.formItem.id = row.id
       this.editIndex = -1
-      this.$Messclassification.info('修改成功')
+      this.falg = 2
+      this.modalAdd()
     },
     cancel () {
       this.editIndex = -1,
@@ -364,19 +377,19 @@ export default {
     handleListApproveHistory () {
       this.$http.post('parking/getParking', {
         pageNum: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
         // carPark: this.select.carPark,
-        // carNum: this.select.carNum,
-        // position: this.select.position,
-        // Lessee: this.select.Lessee,
-        // licensePlate: this.select.licensePlate,
-        // parkinPermit: this.select.parkinPermit,
+        carNum: this.select.carNum,
+        position: this.select.position,
+        lessee: this.select.lessee,
+        licensePlate: this.select.licensePlate,
+        parkinPermit: this.select.parkinPermit
         // telephone: this.select.telephone,
         // startTime: this.select.startTime,
         // endTime: this.select.endTime,
         // pay: this.select.pay
       }, res => {
-        this.historyData = res.data.userList
+        this.historyData = res.data.parkingList
         this.dataCount = res.data.count
       })
     },
@@ -406,7 +419,7 @@ export default {
     },
 
     // 删除操作
-    handleSelectAll (status) {
+    handleSelectAll () {
       if (this.showdata.length > 0) {
         let userIds = []
         for (let i = 0; i < this.showdata.length; i++) {
@@ -444,18 +457,19 @@ export default {
       array.carPark = this.formItem.carPark
       array.carNum = this.formItem.carNum
       array.position = this.formItem.position
-      array.Lessee = this.formItem.Lessee
+      array.lessee = this.formItem.lessee
       array.licensePlate = this.formItem.licensePlate
       array.parkinPermit = this.formItem.parkinPermit
       array.telephone = this.formItem.telephone
-      array.startTime = this.formItem.startTime
-      array.endTime = this.formItem.endTime
+      array.startTime = this.$dateFormat(new Date(this.formItem.startTime), 'yyyy-MM-dd hh:mm:ss')
+      array.endTime = this.$dateFormat(new Date(this.formItem.endTime), 'yyyy-MM-dd hh:mm:ss')
       array.pay = this.formItem.pay
-
-      if ((array.carPark.length !== 0) & (array.carNum.length !== 0) & (array.position.length !== 0) & (array.Lessee.length !== 0) & (array.licensePlate.length !== 0) & (array.parkinPermit.length !== 0) & (array.telephone.length !== 0) & (array.startTime.length !== 0) & (array.endTime.length !== 0) & (array.pay.length !== 0)) {
+      array.id = this.formItem.id
+      console.log(array)
+      if ((array.carPark.length !== 0) & (array.carNum.length !== 0) & (array.position.length !== 0) & (array.lessee.length !== 0) & (array.licensePlate.length !== 0) & (array.parkinPermit.length !== 0) & (array.telephone.length !== 0) & (array.startTime.length !== 0) & (array.endTime.length !== 0) & (array.pay.length !== 0)) {
         this.$http.post('parking/addOrUpdateParking', array, res => {
           if (res.code === 1000) {
-            if (this.flag === 1) {
+            if (this.falg === 1) {
               this.$Message.success('新增成功')
             } else {
               this.$Message.success('修改成功')

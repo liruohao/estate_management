@@ -70,13 +70,11 @@
         </template>
 
         <template slot-scope="{ row, index }" slot="subtotalElectricity">
-          <InputNumber type="text" v-model="historyData.EditSubtotalElectricity" v-if="editwork=== index"></InputNumber>
-          <span v-else>{{ row.subtotalElectricity }}</span>
+          <span>{{ row.subtotalElectricity }}</span>
         </template>
 
         <template slot-scope="{ row, index }" slot="subtotalMoney">
-          <InputNumber type="text" v-model="historyData.EditSubtotalMoney" v-if="editwork=== index"></InputNumber>
-          <span v-else>{{ row.subtotalMoney }}</span>
+          <span>{{ row.subtotalMoney }}</span>
         </template>
 
         <template slot-scope="{ row, index }" slot="action">
@@ -178,16 +176,16 @@
                   <InputNumber clearable v-model="addData.carMoney"  style="width: 100%"></InputNumber >
                 </FormItem>
               </Col>
-              <Col>
-                <FormItem label="小计用电量" prop="subtotalElectricity">
-                  <InputNumber clearable v-model="addData.subtotalElectricity"  style="width: 100%"></InputNumber >
-                </FormItem>
-              </Col>
-              <Col>
-                <FormItem label="小计电费" prop="subtotalMoney">
-                  <InputNumber clearable v-model="addData.subtotalMoney"  style="width: 100%"></InputNumber >
-                </FormItem>
-              </Col>
+              <!--<Col>-->
+                <!--<FormItem label="小计用电量" prop="subtotalElectricity">-->
+                  <!--<InputNumber clearable v-model="addData.subtotalElectricity"  style="width: 100%"></InputNumber >-->
+                <!--</FormItem>-->
+              <!--</Col>-->
+              <!--<Col>-->
+                <!--<FormItem label="小计电费" prop="subtotalMoney">-->
+                  <!--<InputNumber clearable v-model="addData.subtotalMoney"  style="width: 100%"></InputNumber >-->
+                <!--</FormItem>-->
+              <!--</Col>-->
             </Row>
           </Col>
         </Row>

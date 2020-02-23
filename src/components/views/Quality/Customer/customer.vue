@@ -69,9 +69,11 @@
           <div v-if="editIndex === index">
             <Button @click="handleSave(index,row)">保存</Button>
             <Button @click="cancel">取消</Button>
+            <Button type="primary" @click="resetPassword(row)">重置密码</Button>
           </div>
           <div v-else>
             <Button type="success" @click="handleEdit(row, index)">修改</Button>
+            <Button type="primary" @click="resetPassword(row)">重置密码</Button>
           </div>
         </template>
       </Table>
@@ -106,6 +108,13 @@
           <Select v-model="formItem.sex">
             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
+        </FormItem>
+
+        <FormItem label="用户名" class="titfloat">
+          <Input  style="width: 100%;" id="rubric" value="${this.formItem.account}"  v-model="formItem.account" placeholder="请输入用户名" :disabled="this.falg ===3"></Input>
+        </FormItem>
+        <FormItem label="密码" class="titfloat">
+          <Input  style="width: 100%;" id="rubric" value="${this.formItem.password}" type="password" v-model="formItem.password" placeholder="请输入密码" :disabled="this.falg ===3"></Input>
         </FormItem>
         <FormItem label="年龄" class="titfloat">
           <InputNumber  style="width: 100%;" id="rubric" value="${this.formItem.age}"  v-model="formItem.age" placeholder="请输入年龄" :disabled="this.falg ===3"></InputNumber>
@@ -181,7 +190,9 @@ export default {
         age: '',
         phone: '',
         address: '',
-        id: ''
+        id: '',
+        password: '',
+        account: ''
       },
 
       cityList: [
@@ -215,6 +226,19 @@ export default {
     }
   },
   methods: {
+    // 重置密码
+    resetPassword (row) {
+      let obj = JSON.parse(JSON.stringify(row))
+      obj.password = '123456a'
+      obj.roleId = 'b30ae35f8de64cb59125dc9e714f3779'
+      this.$http.post('user/addOrUpdateUser', obj, res => {
+        if (res.code === 1000) {
+          this.$Message.success('密码重置为123456a!')
+        } else {
+          this.$Message.warning(res.msg)
+        }
+      })
+    },
     modalChange (flag) {
       if (!flag) {
         for (let i in this.formItem) {
@@ -257,6 +281,8 @@ export default {
       this.formItem.age = this.editAge
       this.formItem.phone = this.editphone
       this.formItem.address = this.editAddress
+      this.formItem.account = row.account
+      this.formItem.password = row.password
       this.formItem.id = row.id
       this.editIndex = -1
       this.falg = 2
@@ -333,9 +359,11 @@ export default {
         array.age = this.formItem.age
         array.phone = this.formItem.phone
         array.address = this.formItem.address
+        array.account = this.formItem.account
+        array.password = this.formItem.password
         array.id = this.formItem.id
         array.roleId = 'b30ae35f8de64cb59125dc9e714f3779'
-        if ((array.name.length !== 0) & (array.sex.length !== 0) & (array.age.length !== 0) & (array.phone.length !== 0) & (array.address.length !== 0)) {
+        if ((array.account.length !== 0) &(array.password.length !== 0) &(array.name.length !== 0) & (array.sex.length !== 0) & (array.age.length !== 0) & (array.phone.length !== 0) & (array.address.length !== 0)) {
           this.$http.post('user/addOrUpdateUser', array, res => {
             if (res.code === 1000) {
               if (this.flag === 1) {

@@ -20,7 +20,6 @@
 </template>
 
 <script>
-  import $ from 'jquery'
 export default {
   data () {
     return {
@@ -30,35 +29,39 @@ export default {
       }
     }
   },
-  mounted(){
+  mounted () {
 
   },
   methods: {
-    btnLoginClick(){
-      this.$http.get('/api/login').then((response)=>{
-        response=response.body;
-        console.log(response);
-        const ERR_OK=0;
-        if(response.errno===ERR_OK){
-          if(this.checkUser(response.data)){
-            this.$router.push({
-              path:'/index'
-            });
-          }else{
-            this.$Message.error('账号或密码输入错误');
-          }
+    btnLoginClick () {
+      if (this.formInline.username === '') {
+        return this.$Message.warning('账号不能为空')
+      }
+      if (this.formInline.password === '') {
+        return this.$Message.warning('密码不能为空')
+      }
+      this.$http.post('user/login', {
+        account: this.formInline.username,
+        password: this.formInline.password
+      }, res => {
+        if (res.code === 1000) {
+          this.$router.push({
+            name: 'Customer'
+          })
+        } else {
+          this.$Message.warning(res.message)
         }
-      });
+      })
     },
-    search(ev) {
+    search (ev) {
       this.btnLoginClick()
     },
-    checkUser(uList){
-      var that=this;
-      return uList.filter(function(item){
-        return item.username==that.formInline.username&&item.password==that.formInline.password
-      }).length>0;
-    },
+    checkUser (uList) {
+      var that = this
+      return uList.filter(function (item) {
+        return item.username === that.formInline.username && item.password === that.formInline.password
+      }).length > 0
+    }
     // btnLoginClick:function(){
     //   var url="http://192.168.3.24:8083/login";
     //   var _self=this;

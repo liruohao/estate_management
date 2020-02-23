@@ -99,7 +99,7 @@
 
         <template slot-scope="{ row, index }" slot="action">
           <div v-if="editIndex === index">
-            <Button @click="handleSave(index)">保存</Button>
+            <Button @click="handleSave(index, row)">保存</Button>
             <Button @click="cancel">取消</Button>
           </div>
           <div v-else>
@@ -107,12 +107,27 @@
           </div>
         </template>
       </Table>
-      <Page  :total="dataCount" :pcontractname-size="pcontractnameSize" show-sizer class="paging" @on-change="changepcontractname" @on-pcontractname-size-change="pcontractnamesize"></Page>
+      <Page :total="dataCount"
+            style="margin-top: 10px;  width: 100%;
+      height: 56px;
+      line-height: 56px;
+      padding: 0 15px;
+      color: black;
+      box-sizing: border-box;"
+            show-elevator
+            show-sizer
+            show-total
+            :current="pcontractname"
+            :page-size-opts="[10, 20, 30, 50]"
+            :page-size="pcontractnameSize"
+            @on-change="pageChange"
+            @on-page-size-change="pageSizeChange"/>
     </div>
     <Modal v-model="editorshow"  width="60%"
            position="relative"
            @on-ok="modalAdd" @on-cancel="modalExit"
            margin-top="5px" :title="modalTtile"
+           @on-visible-change="modalChange"
            :footer-hide="this.falg ===3">
       <Form :model="formItem" :label-width="80">
         <FormItem label="单据号" class="titfloat">
@@ -151,6 +166,7 @@ export default {
   bill: 'customer',
   data () {
     return {
+      showdata: '',
       columns4: [
         {
           type: 'selection',
@@ -228,7 +244,8 @@ export default {
         company: '',
         contractname: '',
         owncharge: '',
-        othercharge: ''
+        othercharge: '',
+        id: ''
       },
 
       cityList: [
@@ -276,6 +293,27 @@ export default {
   },
   components: {tooLbar},
   methods: {
+    modalChange (flag) {
+      if (!flag) {
+        for (let i in this.formItem) {
+          this.formItem[i] = ''
+        }
+      }
+    },
+    resetSearch () {
+      for (let i in this.select) {
+        this.select[i] = ''
+      }
+      this.handleListApproveHistory()
+    },
+    pageChange (page) {
+      this.pcontractname = page
+      this.handleListApproveHistory()
+    },
+    pageSizeChange (pageSize) {
+      this.pcontractnameSize = pageSize
+      this.handleListApproveHistory()
+    },
     // 查询
     selectData () {
       let array = []
@@ -305,22 +343,23 @@ export default {
       this.editowncharge = row.owncharge
       this.editIndex = index
     },
-    handleSave (index) {
-      this.historyData[index].bill = this.editbill
-      this.historyData[index].company = this.editcompany
-      this.historyData[index].contractname = this.editcontractname
-      this.historyData[index].owncharge = this.editowncharge
-      this.historyData[index].othercharge = this.editothercharge
-      this.historyData[index].materialScience = this.editmaterialScience
-      this.historyData[index].surface = this.editsurface
-      this.historyData[index].pay = this.editpay
-      this.historyData[index].contractcontent = this.editcontractcontent
-      this.historyData[index].consumption = this.editconsumption
-      this.historyData[index].quantityAvailable = this.editquantityAvailable
-      this.historyData[index].judge = this.editjudge
-
+    handleSave (index, row) {
+      this.formItem.bill = this.editbill
+      this.formItem.company = this.editcompany
+      this.formItem.contractname = this.editcontractname
+      this.formItem.owncharge = this.editowncharge
+      this.formItem.othercharge = this.editothercharge
+      this.formItem.materialScience = this.editmaterialScience
+      this.formItem.surface = this.editsurface
+      this.formItem.pay = this.editpay
+      this.formItem.contractcontent = this.editcontractcontent
+      this.formItem.consumption = this.editconsumption
+      this.formItem.quantityAvailable = this.editquantityAvailable
+      this.formItem.judge = this.editjudge
+      this.formItem.id = row.id
       this.editIndex = -1
-      this.$Messcontractname.info('修改成功')
+      this.falg = 2
+      this.modalAdd()
     },
     cancel () {
       this.editIndex = -1,
@@ -328,17 +367,16 @@ export default {
     },
     // 分页管理, 获取历史记录信息
     handleListApproveHistory () {
-      this.$http.post('user/getAllUserInfoPage', {
-        pageNum: this.page,
-        pageSize: this.pageSize,
-        roleId: 'b30ae35f8de64cb59125dc9e714f3779',
-        name: this.select.name,
-        sex: this.select.sex,
-        age: this.select.age === '' ? null : Number(this.select.age),
-        phone: this.select.phone,
-        address: this.select.address
+      this.$http.post('subpackage/getSubpackage', {
+        pageNum: this.pcontractname,
+        pageSize: this.pcontractnameSize,
+        bill: this.select.bill,
+        company: this.select.company,
+        contractname: this.select.contractname,
+        owncharge: this.select.owncharge,
+        othercharge: this.select.othercharge
       }, res => {
-        this.historyData = res.data.userList
+        this.historyData = res.data.equipmentList
         this.dataCount = res.data.count
       })
     },
@@ -360,13 +398,27 @@ export default {
     },
 
     // 删除操作
-    handleSelectAll (status) {
-      for (let i = 0; i < this.historyData.length; i++) {
-        for (let j = 0; j < this.showdata.length; j++) {
-          if (this.historyData[i].id === this.showdata[j].id) {
-            this.historyData.splice(i, 1)
-          }
+    handleSelectAll () {
+      if (this.showdata.length > 0) {
+        let userIds = []
+        for (let i = 0; i < this.showdata.length; i++) {
+          let userId = this.showdata[i].id
+          userIds.push(userId)
         }
+        let userIdsStr = userIds.join(',')
+        this.$Modal.confirm({
+          title: '请选择',
+          content: '确定删除这些数据?',
+          onOk: () => {
+            this.$http.get('subpackage/deleteSubpackage', {
+              id: userIdsStr
+            }, res => {
+              this.handleListApproveHistory()
+              this.$Message.success('删除成功')
+            })
+          }})
+      } else {
+        this.$Message.error('请选择一条数据进行删除')
       }
     },
     // 复选框选择的数据
@@ -380,7 +432,7 @@ export default {
       this.editorshow = true
     },
     modalAdd () {
-      if (this.falg === 1) {
+      if (this.falg === 1 || this.falg === 2) {
         let array = {}
         array.bill = this.formItem.bill
         array.company = this.formItem.company
@@ -389,10 +441,18 @@ export default {
         array.othercharge = this.formItem.othercharge
         array.pay = this.formItem.pay
         array.contractcontent = this.formItem.contractcontent
-
+        array.id = this.formItem.id
         if ((array.bill.length !== 0) & (array.company.length !== 0) & (array.contractname.length !== 0) & (array.owncharge.length !== 0) & (array.othercharge.length !== 0) & (array.pay.length !== 0)) {
-          this.historyData.push(array)
-          this.$Message.info('新增成功')
+          this.$http.post('subpackage/addOrUpdateSubpackage', array, res => {
+            if (res.code === 1000) {
+              if (this.flag === 1) {
+                this.$Message.success('新增成功')
+              } else {
+                this.$Message.success('修改成功')
+              }
+              this.handleListApproveHistory()
+            }
+          })
         } else {
           alert('请补全以上信息')
         }
