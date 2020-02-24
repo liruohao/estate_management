@@ -69,7 +69,6 @@
           <div v-if="editIndex === index">
             <Button @click="handleSave(index,row)">保存</Button>
             <Button @click="cancel">取消</Button>
-            <Button type="primary" @click="resetPassword(row)">重置密码</Button>
           </div>
           <div v-else>
             <Button type="success" @click="handleEdit(row, index)">修改</Button>

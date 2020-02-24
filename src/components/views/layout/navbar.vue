@@ -40,7 +40,7 @@
           </Submenu>
           <Submenu name="5">
             <template slot="title">
-              <Icon type="md-information-circle"></Icon> 个人信息
+              <Icon type="md-contact" /> 个人信息
             </template>
             <MenuItem name="5-1" to="/people2">个人中心 </MenuItem>
             <MenuItem name="5-2" to="/Password">修改密码 </MenuItem>
