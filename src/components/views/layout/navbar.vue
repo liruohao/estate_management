@@ -38,6 +38,12 @@
             <MenuItem name="4-1" to="/staff">物业在职员工公告 </MenuItem>
             <MenuItem name="4-2" to="/owner">小区业主公告</MenuItem>
           </Submenu>
+          <Submenu name="6">
+            <template slot="title">
+              <Icon type="md-contact" /> 业主报修
+            </template>
+            <MenuItem name="6-1" to="/repair">填写报修/投诉 </MenuItem>
+          </Submenu>
           <Submenu name="5">
             <template slot="title">
               <Icon type="md-contact" /> 个人信息

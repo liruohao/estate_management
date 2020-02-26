@@ -13,14 +13,14 @@
         <FormItem label="账号" prop="account" class="user-info-item">
           <Input v-model="userInfo.account" :title="userInfo.account" style="width: 250px"></Input>
         </FormItem>
-        <FormItem label="姓 名" prop="uName" class="user-info-item">
-          <Input v-model="userInfo.uname" style="width: 250px"></Input>
+        <FormItem label="姓 名" prop="name" class="user-info-item">
+          <Input v-model="userInfo.name" style="width: 250px"></Input>
         </FormItem>
         <FormItem label="个人邮箱" prop="email" class="user-info-item">
           <Input v-model="userInfo.email" clearable :maxlength="100" style="width: 250px" :title="userInfo.email"></Input>
         </FormItem>
-        <FormItem label="手机号码" prop="mobilePhone" class="user-info-item">
-          <Input v-model="userInfo.mobilePhone" :maxlength="11"  style="width: 250px" clearable></Input>
+        <FormItem label="手机号码" prop="phone" class="user-info-item">
+          <Input v-model="userInfo.phone" :maxlength="11"  style="width: 250px" clearable></Input>
         </FormItem>
       </Form>
       <Button type="primary" long @click="saveUserInfo('userInfo')" style="width: 200px;margin-left: 70px">保存修改</Button>
@@ -47,7 +47,7 @@ export default {
         email: [
           {required: true, message: '邮箱不能为空', trigger: 'blur'}
         ],
-        mobilePhone: [
+        phone: [
           {required: true, message: '手机号不能为空', trigger: 'blur'}
         ],
         faxAddress: [
@@ -95,7 +95,12 @@ export default {
       // }
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$http.post('user/addOrUpdateUser', this.userInfo, res => {
+          let obj = {}
+          obj.account = this.userInfo.account
+          obj.uname = this.userInfo.uname
+          obj.email = this.userInfo.email
+          obj.mobilePhone = this.userInfo.mobilePhone
+          this.$http.post('user/addOrUpdateUser', obj, res => {
             if (res.code === 1000) {
               this.$Message.success('修改成功')
             } else {

@@ -6,7 +6,7 @@
           <Col span="2">
             <img class="imgstyle"  src="../../../assets/logo-2.png"/>
           </Col>
-          <Col span="1" offset="19" style="margin-top: 17px;">
+          <Col span="1" offset="20" style="margin-top: 17px;">
             <Dropdown offset="7">
               <Button size="small" style="height: 120%" type="default" ghost>
                 <Badge :dot="count">
@@ -39,14 +39,6 @@
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
-          </Col>
-          <Col span="1">
-            <Tooltip content="版本信息" theme="light">
-              <Button type="default" ghost style="margin-top: 17px;margin-left: 3%" @click="drawer=true">
-                <Icon type="md-more" style="color: #FFFFFF"/>
-              </Button>
-            </Tooltip>
-
           </Col>
         </Row>
       </header>

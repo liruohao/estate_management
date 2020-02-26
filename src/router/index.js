@@ -22,6 +22,8 @@ import Owner from '@/components/views/Notice/Owner/owner'
 import Staff from '@/components/views/Notice/Staff/staff'
 import People2 from '@/components/views/People'
 import Password from '@/components/views/Password'
+import Repair from '@/components/views/Repair'
+
 
 Vue.use(Router)
 
@@ -35,6 +37,17 @@ export default new Router({
     {
       path: '/index',
       redirect: 'customer'
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: index,
+      rediect: '/repair',
+      children: [{
+        path: '/repair',
+        name: 'Repair',
+        component: Repair
+      }]
     },
     {
       path: '/index',
