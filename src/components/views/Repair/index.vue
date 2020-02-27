@@ -7,40 +7,9 @@
         <BreadcrumbItem>填写报修/投诉</BreadcrumbItem>
       </Breadcrumb>
     </div>
-    <!--<Form :model="formItem" :label-width="100" inline>-->
-      <!--<FormItem label="所属省份：">-->
-        <!--<Input v-model="formItem.city"/>-->
-      <!--</FormItem>-->
-      <!--<FormItem label="学校名称：">-->
-        <!--<Input v-model="formItem.schoolName"/>-->
-      <!--</FormItem>-->
-      <!--<FormItem label="院校属性：">-->
-        <!--<Select v-model="formItem.schoolProperty" clearable style="width: 150px">-->
-          <!--<Option value="985">985</Option>-->
-          <!--<Option value="211">211</Option>-->
-          <!--<Option value="一本院校">一本院校</Option>-->
-          <!--<Option value="二本院校">二本院校</Option>-->
-        <!--</Select>-->
-      <!--</FormItem>-->
-      <!--<FormItem label="院校类型：">-->
-        <!--<Select v-model="formItem.schoolType" clearable style="width: 150px">-->
-          <!--<Option value="综合类">综合类</Option>-->
-          <!--<Option value="理工类">理工类</Option>-->
-          <!--<Option value="艺术类">艺术类</Option>-->
-          <!--<Option value="体育类">体育类</Option>-->
-          <!--<Option value="财经类">财经类</Option>-->
-          <!--<Option value="政法类">政法类</Option>-->
-          <!--<Option value="语言类">语言类</Option>-->
-          <!--<Option value="医药类">医药类</Option>-->
-          <!--<Option value="农林类">农林类</Option>-->
-          <!--<Option value="军事类">军事类</Option>-->
-          <!--<Option value="民族类">民族类</Option>-->
-          <!--<Option value="师范类">师范类</Option>-->
-        <!--</Select>-->
-      <!--</FormItem>-->
-      <!--<Button type="primary" @click="getSchoolByPage">查询</Button>-->
-      <!--<Button type="primary" @click="resetSearch">重置</Button>-->
-    <!--</Form>-->
+    <div class="lay" style="margin-bottom: 1%">
+      <Button @click="addData" type="primary">新增</Button>
+    </div>
     <Table border ref="currentRowTable" :columns="columns3" :data="data1"></Table>
     <Page :total="total"
           style="margin-top: 10px;  width: 100%;
@@ -56,6 +25,24 @@
           :page-size="pageSize"
           @on-change="pageChange"
           @on-page-size-change="pageSizeChange"/>
+    <Modal title="填写报销/投诉" width="400px" v-model="showMenuModal" :mask-closable="false">
+      <Form ref="SarMenuEO" :model="SarMenuEO"  :label-width="60">
+        <FormItem label="类型" prop="menuName" class="laws-info-item">
+          <Select style="width: 250px">
+            <Option v-for="opt in countryOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="内容" prop="displaySeq" class="laws-info-item">
+          <Input style="width: 250px">></Input>
+        </FormItem>
+        <FormItem label="联系电话" prop="remarks" class="standards-info-item">
+          <Input  style="width: 250px"></Input>
+        </FormItem>
+        <FormItem label="地址" prop="remarks" class="standards-info-item">
+          <Input  style="width: 250px"></Input>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
@@ -64,6 +51,18 @@ export default {
   name: 'school',
   data () {
     return {
+      countryOptions: [
+        {
+          label: '投诉',
+          value: '投诉'
+        },
+        {
+          label: '报修',
+          value: '报修'
+        }
+      ],
+      SarMenuEO: {},
+      showMenuModal: false,
       formItem: {
         city: '',
         schoolName: '',
@@ -113,6 +112,11 @@ export default {
     }
   },
   methods: {
+    closeMenuModal () {},
+    saveMenu () {},
+    addData () {
+      this.showMenuModal = true
+    },
     // 重置
     resetSearch () {
       for (let i in this.formItem) {

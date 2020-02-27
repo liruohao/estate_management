@@ -79,7 +79,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .bglogin {
-    background-image:url("../assets/login.jpg");
+    background-image:url("../assets/table.jpg");
     background-repeat: no-repeat;
     margin: 0 auto 0;
     background-size: 100%;

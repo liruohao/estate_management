@@ -4,8 +4,8 @@
     <div>
       <Breadcrumb class="bread">
         <BreadcrumbItem>主页</BreadcrumbItem>
-        <BreadcrumbItem>品质管理</BreadcrumbItem>
-        <BreadcrumbItem>客户关系管理</BreadcrumbItem>
+        <BreadcrumbItem>成本综合管理</BreadcrumbItem>
+        <BreadcrumbItem>人力资源管理</BreadcrumbItem>
       </Breadcrumb>
     </div>
     <div class="operation">

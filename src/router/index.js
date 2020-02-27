@@ -23,6 +23,7 @@ import Staff from '@/components/views/Notice/Staff/staff'
 import People2 from '@/components/views/People'
 import Password from '@/components/views/Password'
 import Repair from '@/components/views/Repair'
+import NewNotice from '@/components/views/NewNotice'
 
 
 Vue.use(Router)
@@ -47,6 +48,17 @@ export default new Router({
         path: '/repair',
         name: 'Repair',
         component: Repair
+      }]
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: index,
+      rediect: '/newNotice',
+      children: [{
+        path: '/newNotice',
+        name: 'NewNotice',
+        component: NewNotice
       }]
     },
     {
