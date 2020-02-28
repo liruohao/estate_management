@@ -11,7 +11,7 @@
             <MenuItem name="1-1" to="/customer">客户关系管理</MenuItem>
             <MenuItem name="1-2" to="/equipment">设备管理</MenuItem>
             <MenuItem name="1-3" to="/inspection">巡检中心</MenuItem>
-            <MenuItem name="1-4" to="/center">投诉管理</MenuItem>
+            <MenuItem name="1-4" to="/center">报修/投诉管理</MenuItem>
           </Submenu>
           <Submenu name="2" v-if="type">
             <template slot="title">

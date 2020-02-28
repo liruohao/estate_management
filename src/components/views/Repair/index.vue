@@ -14,6 +14,7 @@
     <Page :total="total"
           style="margin-top: 10px;  width: 100%;
       height: 56px;
+      color: black;
       line-height: 56px;
       padding: 0 15px;
       box-sizing: border-box;"
@@ -25,21 +26,24 @@
           :page-size="pageSize"
           @on-change="pageChange"
           @on-page-size-change="pageSizeChange"/>
-    <Modal title="填写报销/投诉" width="400px" v-model="showMenuModal" :mask-closable="false">
+    <Modal  @on-ok="modalAdd" @on-cancel="modalExit"  title="填写报销/投诉" width="400px" v-model="showMenuModal" :mask-closable="false">
       <Form ref="SarMenuEO" :model="SarMenuEO"  :label-width="60">
-        <FormItem label="类型" prop="menuName" class="laws-info-item">
-          <Select style="width: 250px">
+        <FormItem label="类型" prop="type" class="laws-info-item">
+          <Select v-model="SarMenuEO.type" style="width: 250px">
             <Option v-for="opt in countryOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="内容" prop="displaySeq" class="laws-info-item">
-          <Input style="width: 250px">></Input>
+        <FormItem label="业主姓名" prop="ownerPeople" class="laws-info-item">
+          <Input v-model="SarMenuEO.ownerPeople" style="width: 250px"></Input>
         </FormItem>
-        <FormItem label="联系电话" prop="remarks" class="standards-info-item">
-          <Input  style="width: 250px"></Input>
+        <FormItem label="业主电话" prop="ownerPhone" class="laws-info-item">
+          <Input v-model="SarMenuEO.ownerPhone" style="width: 250px"></Input>
         </FormItem>
-        <FormItem label="地址" prop="remarks" class="standards-info-item">
-          <Input  style="width: 250px"></Input>
+        <FormItem label="内容" prop="content" class="laws-info-item">
+          <Input v-model="SarMenuEO.content" style="width: 250px"></Input>
+        </FormItem>
+        <FormItem label="地址" prop="position" class="standards-info-item">
+          <Input  v-model="SarMenuEO.position" style="width: 250px"></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -61,7 +65,13 @@ export default {
           value: '报修'
         }
       ],
-      SarMenuEO: {},
+      SarMenuEO: {
+        type: '',
+        ownerPhone: '',
+        content: '',
+        position: '',
+        ownerPeople: ''
+      },
       showMenuModal: false,
       formItem: {
         city: '',
@@ -77,43 +87,97 @@ export default {
       pageSize: 10,
       columns3: [
         {
-          type: 'index',
-          width: 80,
-          title: '序号',
-          align: 'center'
+          title: '类型',
+          key: 'type'
         },
         {
-          title: '类型',
-          key: 'schoolName'
+          title: '业主姓名',
+          key: 'ownerPeople'
+        },
+        {
+          title: '业主电话',
+          key: 'ownerPhone'
         },
         {
           title: '内容',
-          key: 'schoolProperty'
+          key: 'content'
         },
         {
-          title: '联系电话',
-          key: 'schoolType'
-        },
-        {
-          title: '状态',
-          key: 'schoolType'
+          title: '地址',
+          key: 'position'
         },
         {
           title: '报修时间',
-          key: 'city'
+          key: 'updateTime'
+        },
+        {
+          title: '状态',
+          key: 'state'
         },
         {
           title: '上门时间',
-          key: 'schoolType'
-        }
+          key: 'doorTime',
+          render: (h, params) => {
+            let text = ''
+            text = params.row.doorTime.substring(0, 10)
+            return h('div', {props: {}}, text)
+          }
 
+        },
+        {
+          title: '操作',
+          key: 'action',
+          width: 150,
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.$http.get('complaintReporting/deleteComplaintReporting', {
+                      id: params.row.id
+                    }, res => {
+                      this.$Message.success('取消成功')
+                      this.handleListApproveHistory()
+                    })
+                  }
+                }
+              }, '取消操作')
+            ])
+          }
+        }
       ],
       data1: []
     }
   },
   methods: {
-    closeMenuModal () {},
-    saveMenu () {},
+    modalExit () {},
+    modalAdd () {
+      let array = {}
+      array.type = this.SarMenuEO.type
+      array.ownerPeople = this.SarMenuEO.ownerPeople
+      array.ownerPhone = this.SarMenuEO.ownerPhone
+      array.content = this.SarMenuEO.content
+      array.position = this.SarMenuEO.position
+      array.state = '等待受理'
+      if ((array.type.length !== 0) && (array.ownerPeople !== 0) && (array.ownerPhone.length !== 0) & (array.content.length !== 0) & (array.position.length !== 0)) {
+        this.$http.post('/complaintReporting/addOrUpdateComplaintReporting', array, res => {
+          if (res.code === 1000) {
+            this.$Message.success('新增成功')
+            this.handleListApproveHistory()
+          }
+        })
+      } else {
+        alert('请补全以上信息')
+      }
+    },
     addData () {
       this.showMenuModal = true
     },
@@ -125,24 +189,20 @@ export default {
     },
     pageChange (page) {
       this.pageNo = page
-      this.getSchoolByPage()
+      this.handleListApproveHistory()
     },
     pageSizeChange (pageSize) {
       this.pageSize = pageSize
-      this.getSchoolByPage()
+      this.handleListApproveHistory()
     },
-    getSchoolByPage () {
-      // this.$http.get('sys-school/getSchoolByPage', {
-      //   city: this.formItem.city,
-      //   schoolName: this.formItem.schoolName,
-      //   schoolProperty: this.formItem.schoolProperty,
-      //   schoolType: this.formItem.schoolType,
-      //   page: this.pageNo,
-      //   pageSize: this.pageSize
-      // }, res => {
-      //   this.data1 = res.data.records
-      //   this.total = res.data.total
-      // })
+    handleListApproveHistory () {
+      this.$http.post('complaintReporting/getComplaintReporting', {
+        pageNum: this.pageNo,
+        pageSize: this.pageSize
+      }, res => {
+        this.data1 = res.data.complaintReportingList
+        this.total = res.data.count
+      })
     }
   },
   components: {},
@@ -150,7 +210,7 @@ export default {
   computed: {},
   watch: {},
   mounted () {
-    this.getSchoolByPage()
+    this.handleListApproveHistory()
   }
 }
 </script>

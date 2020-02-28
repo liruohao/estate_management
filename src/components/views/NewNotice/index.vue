@@ -3,7 +3,7 @@
     <Breadcrumb class="bread">
       <BreadcrumbItem>主页</BreadcrumbItem>
       <BreadcrumbItem>小区公告管理</BreadcrumbItem>
-      <BreadcrumbItem>小区业主公告</BreadcrumbItem>
+      <BreadcrumbItem>物业在职员工公告</BreadcrumbItem>
     </Breadcrumb>
     <iframe class="lay" name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=2" width="770" height="70" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
     <div  class="tabowner">
@@ -23,29 +23,35 @@
             :page-size="pageSize"
             @on-change="pageChange"
             @on-page-size-change="pageSizeChange"/>
-      <!--        <Page  :total="dataCount" :page-size="pageSize" show-sizer class="paging" @on-change="changepage" @on-page-size-change="pagesize"></Page>-->
+      <!--      <Page  :total="dataCount" :page-size="pageSize" show-sizer class="paging" @on-change="changepage" @on-page-size-change="pagesize"></Page>-->
     </div>
     <Modal v-model="editorshow"  width="60%"
            position="relative"
            @on-ok="modalAdd" @on-cancel="modalExit"
            margin-top="5px" :title="modalTtile"
+           @on-visible-change="modalChange"
            :footer-hide="this.falg ===3">
       <Form :model="formItem" :label-width="80">
         <FormItem label="标题" class="titfloat">
           <Input id="rubric" value="${this.formItem.input}"  v-model="formItem.input" placeholder="请输入标题" :disabled="this.falg ===3"></Input>
         </FormItem>
         <FormItem label="日期" class="titfloat">
-          <DatePicker  type="date"  id="daychange" value="${this.formItem.tinyData}"  v-model="formItem.tinyData" placeholder="请输入日期" :disabled="this.falg ===3" style="width: 200px;"></DatePicker>
+          <DatePicker  type="date"  id="daychange" value="${this.formItem.tinyData}"  v-model="formItem.tinyData" placeholder="请输入日期" :disabled="this.falg ===3" style="width: 200px "></DatePicker>
+        </FormItem>
+        <FormItem label="内容" class="titfloat">
+          <Input id="substance" type="textarea" :autosize="{minRows: 2}" v-model="formItem.desc" :disabled="this.falg ===3" title="" ></Input>
         </FormItem>
         <!--<FormItem label="日期" class="titfloat">-->
         <!--<Input id="daychange" value="${this.formItem.tinyData}"  v-model="formItem.tinyData" placeholder="请输入日期" :disabled="this.falg ===3"/>-->
         <!--</FormItem>-->
-        <FormItem label="内容" class="titfloat">
-          <Input id="substance" type="textarea" :autosize="{minRows: 2}" v-model="formItem.desc" :disabled="this.falg ===3" title="" ></Input>
-        </FormItem>
         <!--<editor   :autosize="{minRows: 2}"  :disabled="this.falg ===2"></editor>-->
       </Form>
     </Modal>
+    <Modal v-model="importModalshowflag" title="下载附件" footer-hide :z-index="1000" width="80%" class="modal-bg">
+      <div style="margin-bottom: 15px; line-height: 30px">已上传的资料</div>
+      <Table :columns="courseColumns" :data="courseList" height="400" border ref="selection" @on-selection-change="handleRowChange" ></Table>
+    </Modal>
+
   </div>
 </template>
 
@@ -54,6 +60,59 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      clickMenuList: [],
+      fileData: {
+        noticeId: ''
+      },
+      courseColumns: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center'
+        },
+        {
+          title: '附件名称',
+          align: 'center',
+          key: 'fileOldName'
+        },
+        {
+          title: '上传时间',
+          align: 'center',
+          key: 'updatedTime',
+          render: (h, params) => {
+            let typeShow = this.$dateFormat(new Date(params.row.createTime), 'yyyy-MM-dd hh:mm:ss')
+            return h('div', {props: {}}, typeShow)
+          }
+        },
+        {
+          title: '操作',
+          key: 'action',
+          align: 'center',
+          width: 400,
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    window.open('estate_management_war_exploded/noticeFile/downloadFile?noticeFileId=' + params.row.id)
+                  }
+                }
+              }, params.row.fileName === '' || params.row.fileName === null ? '修改' : '下载')
+            ])
+          }
+        }
+      ],
+      courseId: '',
+      courseList: [],
+      importExcelUrl: 'estate_management_war_exploded/noticeFile/uploadFile',
+      importModalshowflag: false,
       falg: '', // 判断现在的操作为是什么 1 为新增 2为编辑 3为查看
       // 当前行
       item: '',
@@ -62,7 +121,7 @@ export default {
         input: '',
         tinyData: '',
         desc: '',
-        noticeType: '0',
+        noticeType: 1,
         id: ''
       },
       ajaxHistoryData: [],
@@ -87,6 +146,11 @@ export default {
       modalAddContent: [],
       columns4: [
         {
+          type: 'selection',
+          width: 60,
+          align: 'center'
+        },
+        {
           title: '日期',
           key: 'createTime',
           align: 'center'
@@ -105,7 +169,7 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 150,
+          width: 250,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -133,10 +197,12 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.edit(params.row)
+                    this.importModalshowflag = true
+                    this.courseList = params.row.noticeFileList
+                    this.fileData.noticeId = params.row.id
                   }
                 }
-              }, '下载')
+              }, '下载附件')
             ])
           }
         }
@@ -146,11 +212,63 @@ export default {
   },
   // components: {Editor},
   methods: {
+    getNoticeById () {
+      this.$http.get('notice/getNoticeById', {
+        id: this.fileData.noticeId
+      }, res => {
+        this.courseList = res.data.noticeFileList
+      })
+    },
+    handleRowChange (selection) {
+      this.clickMenuList = selection
+    },
+    fileSuccess (response) {
+      if (response.code === 1000) {
+        this.$Message.success('上传成功！')
+        this.getNoticeById()
+      } else {
+        this.$Message.warning(response.msg)
+      }
+    },
+    // 批量删除
+    batchMenuDel () {
+      if (this.clickMenuList.length > 0) {
+        let userIds = []
+        for (let i = 0; i < this.clickMenuList.length; i++) {
+          let userId = this.clickMenuList[i].id
+          userIds.push(userId)
+        }
+        let userIdsStr = userIds.join(',')
+        this.$Modal.confirm({
+          title: '请选择',
+          content: '确定删除这些数据?',
+          onOk: () => {
+            this.$http.get('noticeFile/deleteNoticeFile', {
+              id: userIdsStr
+            }, res => {
+              if (res.code === 1000) {
+                this.getNoticeById()
+                this.$Message.success('删除成功')
+              }
+            })
+          }})
+      } else {
+        this.$Message.error('请选择一条数据进行删除')
+      }
+    },
+    modalChange (flag) {
+      if (!flag) {
+        for (let i in this.formItem) {
+          this.formItem[i] = ''
+        }
+      }
+    },
     // 分页管理, 获取历史记录信息
     handleListApproveHistory () {
       this.$http.post('notice/getNotice', {
         pageNum: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        noticeType: 1
       }, res => {
         this.historyData = res.data.notices
         this.dataCount = res.data.count
@@ -163,21 +281,6 @@ export default {
     pageSizeChange (pageSize) {
       this.pageSize = pageSize
       this.handleListApproveHistory()
-    },
-    // 当前页码
-    changepage (index) {
-      this.page = index
-      let _start = (index - 1) * this.pageSize
-      let _end = index * this.pageSize
-      this.historyData = this.ajaxHistoryData.slice(_start, _end)
-    },
-    // 返回切换后的每页条数
-    pagesize (index) {
-      let _start = (this.page - 1) * index
-      let _end = this.page * index
-      this.historyData = this.ajaxHistoryData.slice(_start, _end)
-      // 当前展示条数
-      this.pageSize = index
     },
     // 复选框选择的数据
     dataChange (data) {
@@ -197,6 +300,7 @@ export default {
       this.formItem.desc = row.content
       this.formItem.input = row.title
       this.formItem.tinyData = row.createTime
+      this.formItem.id = row.id
     },
     // 模态框确认按钮
     modalAdd () {
@@ -213,6 +317,7 @@ export default {
       if (array.date === 'Invalid date') {
         array.date = ''
       }
+      array.noticeType = 1
       console.log(array.title + '，' + array.date + '，' + array.content + '，' + (array.date.length !== 0) & (array.title.length !== 0) & (array.content.length !== 0))
       if ((array.date.length !== 0) & (array.title.length !== 0) & (array.content.length !== 0)) {
         this.$http.post('notice/addOrUpdateNotice', array, res => {
@@ -230,6 +335,7 @@ export default {
       } else {
         alert('请补全以上信息')
       }
+      this.handleListApproveHistory()
     },
     modalExit () {
       this.$Message.error('已取消操作')
@@ -244,8 +350,7 @@ export default {
       this.item = row._index
       this.formItem.id = row.id
     },
-    // 删除
-    handleSelectAll (status) {
+    handleSelectAll () {
       if (this.showdata.length > 0) {
         let userIds = []
         for (let i = 0; i < this.showdata.length; i++) {
@@ -302,5 +407,10 @@ export default {
     /*background-color: aliceblue;*/
     background-color: #F8F8F9;
     margin: 10px;
+  }
+  .ivu-modal-body{
+    max-height: 500px;
+    min-height: 300px;
+    overflow-y: auto;
   }
 </style>

@@ -25,7 +25,6 @@ import Password from '@/components/views/Password'
 import Repair from '@/components/views/Repair'
 import NewNotice from '@/components/views/NewNotice'
 
-
 Vue.use(Router)
 
 export default new Router({

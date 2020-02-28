@@ -33,7 +33,7 @@ export default {
   name: 'personal-data',
   data () {
     return {
-      userInfo: JSON.parse(sessionStorage.getItem('user')),
+      userInfo: {},
       loading: false,
       userInfoRules: {
         account: [
@@ -100,8 +100,10 @@ export default {
           obj.uname = this.userInfo.uname
           obj.email = this.userInfo.email
           obj.mobilePhone = this.userInfo.mobilePhone
+          obj.id = this.userInfo.id
           this.$http.post('user/addOrUpdateUser', obj, res => {
             if (res.code === 1000) {
+              this.getUserInfo()
               this.$Message.success('修改成功')
             } else {
               this.$Message.warning(res.msg)
@@ -120,6 +122,13 @@ export default {
       } else {
         callback()
       }
+    },
+    getUserInfo () {
+      this.$http.get(' /user/getUserInfo', {
+        id: JSON.parse(sessionStorage.getItem('user')).id
+      }, res => {
+        this.userInfo = res.data
+      })
     }
   },
   computed: {
@@ -127,6 +136,7 @@ export default {
   watch: {
   },
   mounted () {
+    this.getUserInfo()
   }
 }
 </script>
