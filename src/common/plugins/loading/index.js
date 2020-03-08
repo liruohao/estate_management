@@ -1,6 +1,6 @@
 /**
  * @description: Loading
- * @author: chenxiaoxi
+ * @author:
  * @date: 2018-09-04 09:09:38
  */
 export default {

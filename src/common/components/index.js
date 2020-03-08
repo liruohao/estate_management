@@ -1,6 +1,6 @@
 /**
  * @description: 自定义全局组件
- * @author: chenxiaoxi
+ * @author:
  * @date: 2018-09-10 14:41:16
  */
 

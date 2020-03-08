@@ -1,6 +1,6 @@
 /**
  * @description: confirm弹窗
- * @author: chenxiaoxi
+ * @author:
  * @date: 2018-09-13 10:52:14
  */
 import Vue from 'vue'

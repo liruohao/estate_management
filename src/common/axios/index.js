@@ -1,6 +1,6 @@
 /**
  * @description: axios
- * @author: chenxiaoxi
+ * @author:
  * @date: 2018/12/20 14:13:36
  */
 import axios from 'axios'
@@ -30,7 +30,7 @@ axios.interceptors.request.use(
 export default {
   /**
    * @description: get请求
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2018/12/20 14:22:36
    */
   get (url, params, thenFun, exeFun) {
@@ -45,7 +45,7 @@ export default {
 
   /**
    * @description: post请求(json格式提交)
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2018/12/20 14:24:47
    */
   post (url, params, thenFun, exeFun) {
@@ -58,7 +58,7 @@ export default {
 
   /**
    * @description: post请求(formData格式提交)
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2018/12/20 14:27:30
    */
   postData (url, params, thenFun, exeFun) {
@@ -72,7 +72,7 @@ export default {
 
   /**
    * @description: put请求(json格式提交)
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2018/12/20 14:29:27
    */
   put (url, params, thenFun, exeFun) {
@@ -85,7 +85,7 @@ export default {
 
   /**
    * @description: put请求(formData格式提交)
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2018/12/20 14:31:32
    */
   putData (url, params, thenFun, exeFun) {
@@ -99,7 +99,7 @@ export default {
 
   /**
    * @description: delete请求
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2018/12/20 14:32:58
    */
   delete (url, params, thenFun, exeFun) {
@@ -114,7 +114,7 @@ export default {
 
   /**
    * @description: delete方法(根据id删除)
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2018/12/20 14:33:46
    */
   deleteById (url, params, thenFun, exeFun) {
@@ -127,7 +127,7 @@ export default {
 
   /**
    * @description: 文件上传
-   * @author: chenxiaoxi
+   * @author:
    * @date: 2019/04/11 11:08:58
    */
   uploadFile (url, params, thenFun, exeFun) {

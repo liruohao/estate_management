@@ -1,6 +1,6 @@
 /**
  * @description: 简单日期转换
- * @author: chenxiaoxi
+ * @author:
  * @date: 2018/11/01 10:40:26
  */
 export default (date, time) => {
