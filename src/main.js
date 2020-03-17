@@ -12,7 +12,6 @@ import plugins from '@/common/plugins'
 import VueMoment from 'vue-moment'
 import axios from '@/common/axios'
 
-
 // Vue.use(VueResource)
 Vue.use(iView)
 Vue.use(VueMoment)

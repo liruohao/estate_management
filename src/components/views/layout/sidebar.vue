@@ -4,7 +4,7 @@
       <header  class="layout">
         <Row style="height: 65px;">
           <Col span="2">
-            <img class="imgstyle"  src="../../../assets/logo-2.png"/>
+            <img class="imgstyle"  src="../../../assets/login-4.png"/>
           </Col>
           <Col span="1" offset="20" style="margin-top: 17px;">
             <Dropdown offset="7">
