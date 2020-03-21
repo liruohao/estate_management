@@ -16,5 +16,5 @@ const INTERFACE_PORT = process.env.NODE_ENV === 'production' ? PROD_INTERFACE_PO
 
 module.exports =  {
   serverUrl: 'http://' + SERVER_IP, // 服务器IP地址
-  interfaceUrl: 'http://' + SERVER_IP + ':' + INTERFACE_PORT + '/estate_management_war_exploded' // 服务器接口访问地址
+  interfaceUrl: 'http://' + SERVER_IP + ':' + INTERFACE_PORT + '/estate_management_war' // 服务器接口访问地址
 }

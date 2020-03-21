@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/estate_management_war_exploded': {
+      '/estate_management_war': {
         target: sysConfig.interfaceUrl,
         changeOrigin: true,
         pathRewrite: {
-          '^/estate_management_war_exploded': ''
+          '^/estate_management_war': ''
         }
       }
     },

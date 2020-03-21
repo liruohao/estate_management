@@ -34,7 +34,7 @@ export default {
    * @date: 2018/12/20 14:22:36
    */
   get (url, params, thenFun, exeFun) {
-    axios.get('/estate_management_war_exploded/' + url + '?' + new Date().getTime(), {
+    axios.get('/estate_management_war/' + url + '?' + new Date().getTime(), {
       params: params
     }).then(res => {
       thenFun.call(this, res.data)
@@ -49,7 +49,7 @@ export default {
    * @date: 2018/12/20 14:24:47
    */
   post (url, params, thenFun, exeFun) {
-    axios.post('/estate_management_war_exploded/' + url + '?' + new Date().getTime(), params).then(res => {
+    axios.post('/estate_management_war/' + url + '?' + new Date().getTime(), params).then(res => {
       thenFun.call(this, res.data)
     }).catch(err => {
       exeFun.call(this, err)
@@ -63,7 +63,7 @@ export default {
    */
   postData (url, params, thenFun, exeFun) {
     var _formData = formData(params)
-    axios.post('/estate_management_war_exploded/' + url + '?' + new Date().getTime(), _formData).then(res => {
+    axios.post('/estate_management_war/' + url + '?' + new Date().getTime(), _formData).then(res => {
       thenFun.call(this, res.data)
     }).catch(err => {
       exeFun.call(this, err)
@@ -76,7 +76,7 @@ export default {
    * @date: 2018/12/20 14:29:27
    */
   put (url, params, thenFun, exeFun) {
-    axios.put('/estate_management_war_exploded/' + url + '?' + new Date().getTime(), params).then(res => {
+    axios.put('/estate_management_war/' + url + '?' + new Date().getTime(), params).then(res => {
       thenFun.call(this, res.data)
     }).catch(err => {
       exeFun.call(this, err)
@@ -90,7 +90,7 @@ export default {
    */
   putData (url, params, thenFun, exeFun) {
     var _formData = formData(params)
-    axios.put('/estate_management_war_exploded/' + url, _formData).then(res => {
+    axios.put('/estate_management_war/' + url, _formData).then(res => {
       thenFun.call(this, res.data)
     }).catch(err => {
       exeFun.call(this, err)
@@ -103,7 +103,7 @@ export default {
    * @date: 2018/12/20 14:32:58
    */
   delete (url, params, thenFun, exeFun) {
-    axios.delete('/estate_management_war_exploded/' + url + '?' + new Date().getTime(), {
+    axios.delete('/estate_management_war/' + url + '?' + new Date().getTime(), {
       params: params
     }).then(res => {
       thenFun.call(this, res.data)
@@ -118,7 +118,7 @@ export default {
    * @date: 2018/12/20 14:33:46
    */
   deleteById (url, params, thenFun, exeFun) {
-    axios.delete('/estate_management_war_exploded/' + url + '?' + new Date().getTime()).then(res => {
+    axios.delete('/estate_management_war/' + url + '?' + new Date().getTime()).then(res => {
       thenFun.call(this, res.data)
     }).catch(err => {
       exeFun.call(this, err)
@@ -132,7 +132,7 @@ export default {
    */
   uploadFile (url, params, thenFun, exeFun) {
     var _formData = formData(params)
-    axios.post('/estate_management_war_exploded/' + url + '?' + new Date().getTime(), _formData, {
+    axios.post('/estate_management_war/' + url + '?' + new Date().getTime(), _formData, {
       timeout: 0
     }).then(res => {
       thenFun.call(this, res.data)
