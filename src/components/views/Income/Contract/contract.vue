@@ -294,10 +294,8 @@ export default {
   components: {tooLbar},
   methods: {
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.formItem) {
-          this.formItem[i] = ''
-        }
+      for (let i in this.formItem) {
+        this.formItem[i] = ''
       }
     },
     resetSearch () {

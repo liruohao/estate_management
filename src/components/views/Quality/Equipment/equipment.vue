@@ -180,10 +180,8 @@ export default {
   },
   methods: {
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.formItem) {
-          this.formItem[i] = ''
-        }
+      for (let i in this.formItem) {
+        this.formItem[i] = ''
       }
     },
     pageChange (page) {

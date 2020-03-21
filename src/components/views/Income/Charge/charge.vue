@@ -336,10 +336,8 @@ export default {
       this.handleListApproveHistory()
     },
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.formItem) {
-          this.formItem[i] = ''
-        }
+      for (let i in this.formItem) {
+        this.formItem[i] = ''
       }
     },
     resetSearch () {
