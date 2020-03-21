@@ -180,10 +180,8 @@ export default {
   },
   methods: {
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.formItem) {
-          this.formItem[i] = ''
-        }
+      for (let i in this.formItem) {
+        this.formItem[i] = ''
       }
     },
     pageChange (page) {
@@ -292,7 +290,7 @@ export default {
         if ((array.planNumber.length !== 0) & (array.maintain.length !== 0) & (array.implatment.length !== 0) & (array.equipment.length !== 0) & (array.maintainCenter.length !== 0)) {
           this.$http.post('equipment/addOrUpdateEquipment', array, res => {
             if (res.code === 1000) {
-              if (this.flag === 1) {
+              if (this.falg === 1) {
                 this.$Message.success('新增成功')
               } else {
                 this.$Message.success('修改成功')

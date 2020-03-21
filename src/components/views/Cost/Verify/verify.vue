@@ -343,10 +343,8 @@ export default {
   components: {tooLbar},
   methods: {
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.formItem) {
-          this.formItem[i] = ''
-        }
+      for (let i in this.formItem) {
+        this.formItem[i] = ''
       }
     },
     resetSearch () {
@@ -414,7 +412,7 @@ export default {
         pageSize: this.pclassificationSize,
         code: this.select.code,
         category: this.select.category,
-        name : this.select.name,
+        name: this.select.name,
         classification: this.select.classification,
         specifications: this.select.specifications
       }, res => {
@@ -501,7 +499,7 @@ export default {
         if ((array.code.length !== 0) & (array.category.length !== 0) & (array.classification.length !== 0) & (array.name.length !== 0) & (array.specifications.length !== 0) & (array.materialScience.length !== 0) & (array.surface.length !== 0) & (array.logo.length !== 0) & (array.business.length !== 0) & (array.consumption.length !== 0) & (array.quantityAvailable.length !== 0) & (array.judge.length !== 0)) {
           this.$http.post('/materiel/addOrUpdateMateriel', array, res => {
             if (res.code === 1000) {
-              if (this.flag === 1) {
+              if (this.falg === 1) {
                 this.$Message.success('新增成功')
               } else {
                 this.$Message.success('修改成功')

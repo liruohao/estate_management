@@ -15,8 +15,7 @@
       <Table :columns="columns" :data="ajaxHistoryData" border  height="400" @on-selection-change="dataChange">
 
         <template slot-scope="{ row, index }" slot="Month">
-          <DatePicker type="month" transfer  clearable v-model="historyData.EditMonth" style="width: 100%" @on-change="timeChange" v-if="editwork=== index"></DatePicker>
-          <span v-else>{{ row.year + '- ' + row.month }}</span>
+          <span >{{ row.year + '- ' + row.month }}</span>
         </template>
 
         <template slot-scope="{ row, index }" slot="landscapeElectricity">
@@ -360,7 +359,7 @@ export default {
         EditSubtotalElectricity: 0,
         EditSubtotalMoney: 0
       },
-      flag: '',
+      falg: '',
       addData: {
         id: '',
         time: '',
@@ -384,10 +383,8 @@ export default {
   components: {tooLbar},
   methods: {
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.addData) {
-          this.addData[i] = ''
-        }
+      for (let i in this.addData) {
+        this.addData[i] = ''
       }
     },
     dataChange (data) {
@@ -431,7 +428,7 @@ export default {
     },
     // 修改信息
     handleEdit (row, index) {
-      this.historyData.time = row.year + '-' +row.month
+      this.historyData.time = row.year + '-' + row.month
       this.historyData.EditMonth = row.Month
       this.historyData.EditlandscapeElectricity = row.landscapeElectricity
       this.historyData.EditlandscapeMoney = row.landscapeMoney
@@ -474,7 +471,7 @@ export default {
     // 新增按钮
     handleAdd () {
       this.modalAdd = true
-      this.flag = 1
+      this.falg = 1
     },
     // 模态框确定按钮
     addCancel () {
@@ -504,12 +501,10 @@ export default {
         (array.corridorElectricity.length !== 0) &&
         (array.corridorMoney.length !== 0) &&
         (array.carElectricity.length !== 0) &&
-        (array.carMoney.length !== 0) &&
-        (array.subtotalElectricity.length !== 0) &&
-        (array.subtotalMoney.length !== 0)) {
+        (array.carMoney.length !== 0)) {
         this.$http.post('energyConsumption/addOrUpdateEnergyConsumption', array, res => {
           if (res.code === 1000) {
-            if (this.flag === 1) {
+            if (this.falg === 1) {
               this.$Message.success('新增成功')
             } else {
               this.$Message.success('修改成功')

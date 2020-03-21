@@ -239,10 +239,8 @@ export default {
       })
     },
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.formItem) {
-          this.formItem[i] = ''
-        }
+      for (let i in this.formItem) {
+        this.formItem[i] = ''
       }
     },
     resetSearch () {
@@ -365,7 +363,7 @@ export default {
         if ((array.account.length !== 0) & (array.password.length !== 0) & (array.name.length !== 0) & (array.sex.length !== 0) & (array.age.length !== 0) & (array.phone.length !== 0) & (array.address.length !== 0)) {
           this.$http.post('user/addOrUpdateUser', array, res => {
             if (res.code === 1000) {
-              if (this.flag === 1) {
+              if (this.falg === 1) {
                 this.$Message.success('新增成功')
               } else {
                 this.$Message.success('修改成功')

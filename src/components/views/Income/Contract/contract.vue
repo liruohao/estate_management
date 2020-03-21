@@ -294,10 +294,8 @@ export default {
   components: {tooLbar},
   methods: {
     modalChange (flag) {
-      if (!flag) {
-        for (let i in this.formItem) {
-          this.formItem[i] = ''
-        }
+      for (let i in this.formItem) {
+        this.formItem[i] = ''
       }
     },
     resetSearch () {
@@ -445,7 +443,7 @@ export default {
         if ((array.bill.length !== 0) & (array.company.length !== 0) & (array.contractname.length !== 0) & (array.owncharge.length !== 0) & (array.othercharge.length !== 0) & (array.pay.length !== 0)) {
           this.$http.post('subpackage/addOrUpdateSubpackage', array, res => {
             if (res.code === 1000) {
-              if (this.flag === 1) {
+              if (this.falg === 1) {
                 this.$Message.success('新增成功')
               } else {
                 this.$Message.success('修改成功')
