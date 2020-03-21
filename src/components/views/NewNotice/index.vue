@@ -322,7 +322,7 @@ export default {
       if ((array.date.length !== 0) & (array.title.length !== 0) & (array.content.length !== 0)) {
         this.$http.post('notice/addOrUpdateNotice', array, res => {
           if (res.code === 1000) {
-            if (this.flag === 1) {
+            if (this.falg === 1) {
               this.$Message.success('新增成功')
             } else {
               this.$Message.success('修改成功')

@@ -311,7 +311,7 @@ export default {
         if ((array.nodeAddress.length !== 0) & (array.nodeName.length !== 0) & (array.fireControl.length !== 0) & (array.clean.length !== 0) & (array.ant.length !== 0) & (array.humidity.length !== 0)) {
           this.$http.post('inspectionCenter/addOrUpdateInspectionCenter', array, res => {
             if (res.code === 1000) {
-              if (this.flag === 1) {
+              if (this.falg === 1) {
                 this.$Message.success('新增成功')
               } else {
                 this.$Message.success('修改成功')
