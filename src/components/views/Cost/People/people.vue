@@ -42,7 +42,9 @@
           <Input type="text" v-model="editName" v-if="editIndex === index" title=""></Input>
           <span v-else>{{ row.name }}</span>
         </template>
-
+        <template slot-scope="{ row, index }" slot="account">
+          <span>{{ row.account }}</span>
+        </template>
         <template slot-scope="{ row, index }" slot="sex">
           <Select v-model="editSex" v-if="editIndex === index" transfer>
             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -147,15 +149,21 @@ export default {
         },
         {
           title: '姓名',
-          slot: 'name'
+          slot: 'name',
+        },
+        {
+          title: '用户名',
+          slot: 'account',
         },
         {
           title: '性别',
-          slot: 'sex'
+          slot: 'sex',
+          width: 60
         },
         {
           title: '年龄',
-          slot: 'age'
+          slot: 'age',
+          width: 60
         },
         {
           title: '电话',
@@ -369,6 +377,8 @@ export default {
                 this.$Message.success('修改成功')
               }
               this.handleListApproveHistory()
+            } else {
+              this.$Message.warning(res.message)
             }
           })
         } else {
