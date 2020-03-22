@@ -136,7 +136,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    window.open('estate_management_war_exploded/noticeFile/downloadFile?noticeFileId=' + params.row.id)
+                    window.open('estate_management_war/noticeFile/downloadFile?noticeFileId=' + params.row.id)
                   }
                 }
               }, params.row.fileName === '' || params.row.fileName === null ? '修改' : '下载')
@@ -146,7 +146,7 @@ export default {
       ],
       courseId: '',
       courseList: [],
-      importExcelUrl: 'estate_management_war_exploded/noticeFile/uploadFile',
+      importExcelUrl: 'estate_management_war/noticeFile/uploadFile',
       importModalshowflag: false,
       falg: '', // 判断现在的操作为是什么 1 为新增 2为编辑 3为查看
       // 当前行
